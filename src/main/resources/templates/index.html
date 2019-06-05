@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
 
   <meta charset="utf-8">
@@ -8,8 +8,8 @@
   <title>My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="../../../../../../Downloads/recipe-site%204/css/unsemantic-grid-responsive.css">
-  <link rel="stylesheet" href="../../../../../../Downloads/recipe-site%204/css/styles.css">
+  <link rel="stylesheet" th:href="@{css/unsemantic-grid-responsive.css}">
+  <link rel="stylesheet" th:href="@{css/styles.css}">
 
 </head>
 
@@ -30,7 +30,7 @@
     <div class="grid-100">
       <a href="index.html">
         <h1>
-          <img src="../../../../../../Downloads/recipe-site%204/images/chefbot.svg" height="60px">
+          <img th:src="@{images/chefbot.svg}" height="60px">
           <br>
           My Recipes
         </h1>
@@ -62,10 +62,10 @@
         </div> <div class="clear"></div>
 
         <div class="grid-100 row addHover">
-          <a href="../../../../../../Downloads/recipe-site%204/detail.html">
+          <a th:href="@{detail}">
             <div class="grid-70">
               <p>
-                <span><img src="../../../../../../Downloads/recipe-site%204/images/favorite.svg" height="12px"> </span>
+                <span><img th:src="@{images/favorite.svg}" height="12px"> </span>
                 Baked Alaskan Salmon with Asparagus
               </p>
             </div>
@@ -74,71 +74,8 @@
             <div class="grid-30">
               <div class="flush-right">
                 <p>
-                  <a href="../../../../../../Downloads/recipe-site%204/edit.html"> <img src="../../../../../../Downloads/recipe-site%204/images/edit.svg" height="12px"> Edit </a>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/delete.svg" height="12px"> Delete </a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> <div class="clear"></div>
-
-        <div class="grid-100 row addHover">
-          <a href="../../../../../../Downloads/recipe-site%204/detail.html">
-            <div class="grid-70">
-              <p>
-                <span><img src="../../../../../../Downloads/recipe-site%204/images/favorited.svg" height="12px"> </span>
-                Broiche French Toast with Nutella
-              </p>
-            </div>
-          </a>
-          <div class="hoverBlock">
-            <div class="grid-30">
-              <div class="flush-right">
-                <p>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/edit.svg" height="12px"> Edit </a>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/delete.svg" height="12px"> Delete </a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> <div class="clear"></div>
-
-        <div class="grid-100 row addHover">
-          <a href="../../../../../../Downloads/recipe-site%204/detail.html">
-            <div class="grid-70">
-              <p>
-                <span><img src="../../../../../../Downloads/recipe-site%204/images/favorite.svg" height="12px"> </span>
-                Simple Miso Soup with Clams and Sake
-              </p>
-            </div>
-          </a>
-          <div class="hoverBlock">
-            <div class="grid-30">
-              <div class="flush-right">
-                <p>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/edit.svg" height="12px"> Edit </a>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/delete.svg" height="12px"> Delete </a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div> <div class="clear"></div>
-
-        <div class="grid-100 row addHover">
-          <a href="../../../../../../Downloads/recipe-site%204/detail.html">
-            <div class="grid-70">
-              <p>
-                <span><img src="../../../../../../Downloads/recipe-site%204/images/favorite.svg" height="12px"> </span>
-                Paleo Squash Noodles with Chicken Breast
-              </p>
-            </div>
-          </a>
-          <div class="hoverBlock">
-            <div class="grid-30">
-              <div class="flush-right">
-                <p>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/edit.svg" height="12px"> Edit </a>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/delete.svg" height="12px"> Delete </a>
+                  <a th:href="@{edit}"> <img th:src="@{images/edit.svg}" height="12px"> Edit </a>
+                  <a href="#"> <img th:src="@{/images/delete.svg}" height="12px"> Delete </a>
                 </p>
               </div>
             </div>
