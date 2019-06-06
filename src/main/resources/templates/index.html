@@ -61,10 +61,10 @@
           </div>
         </div> <div class="clear"></div>
 
-        <div class="grid-100 row addHover">
+        <div class="grid-100 row addHover" th:each="${recipe : recipes}">
           <a th:href="@{detail}">
             <div class="grid-70">
-              <p>
+              <p th:text="${recipe.name}">
                 <span><img th:src="@{images/favorite.svg}" height="12px"> </span>
                 Baked Alaskan Salmon with Asparagus
               </p>

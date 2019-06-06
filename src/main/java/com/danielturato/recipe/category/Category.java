@@ -1,10 +1,8 @@
 package com.danielturato.recipe.category;
 
 public enum Category {
-    DESSERT,
-    STARTER,
-    DINNER,
+    BREAKFAST,
     LUNCH,
-    SNACK,
-    SIDE_DISH
+    DINNER,
+    DESSERT
 }

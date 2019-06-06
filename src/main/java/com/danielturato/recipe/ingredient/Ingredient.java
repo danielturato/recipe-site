@@ -1,4 +1,4 @@
-package com.danielturato.recipe.ingrediant;
+package com.danielturato.recipe.ingredient;
 
 import com.danielturato.recipe.core.BaseEntity;
 

@@ -22,7 +22,7 @@ public class User extends BaseEntity {
     @JsonIgnore
     private String password;
     @JsonIgnore
-    private List<String> roles;
+    private String[] roles;
     @ManyToMany
     private List<Recipe> favorites;
 
@@ -31,7 +31,7 @@ public class User extends BaseEntity {
         favorites = new ArrayList<>();
     }
 
-    public User(@NotNull String username, @NotNull String password, List<String> roles) {
+    public User(@NotNull String username, @NotNull String password, String[] roles) {
         this();
         this.username = username;
         setPassword(password);
@@ -58,11 +58,11 @@ public class User extends BaseEntity {
         this.password = PASSWORD_ENCODER.encode(password);
     }
 
-    public List<String> getRoles() {
+    public String[] getRoles() {
         return roles;
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(String[] roles) {
         this.roles = roles;
     }
 

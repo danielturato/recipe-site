@@ -1,12 +1,14 @@
 package com.danielturato.recipe.recipe;
 
 import com.danielturato.recipe.category.Category;
-import com.danielturato.recipe.ingrediant.Ingredient;
+import com.danielturato.recipe.ingredient.Ingredient;
 import com.danielturato.recipe.core.BaseEntity;
+import com.danielturato.recipe.user.User;
 
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,8 @@ public class Recipe extends BaseEntity {
     private List<Ingredient> ingredients;
     @Lob
     private Map<Integer, String> steps;
+    @OneToOne
+    private User owner;
 
     protected Recipe() {
         super();
@@ -38,13 +42,18 @@ public class Recipe extends BaseEntity {
         steps = new TreeMap<>();
     }
 
-    public Recipe(String name, String description, Category category, int prepTime, int cookTime) {
+    public Recipe(String name, String description, Category category, int prepTime, int cookTime, User owner) {
         this();
         this.name = name;
         this.description = description;
         this.category = category;
         this.prepTime = prepTime;
         this.cookTime = cookTime;
+        this.owner = owner;
+    }
+
+    public User getOwner() {
+        return owner;
     }
 
     public void addIngredient(Ingredient ingredient) {
