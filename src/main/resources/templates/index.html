@@ -8,19 +8,18 @@
   <title>My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" th:href="@{css/unsemantic-grid-responsive.css}">
-  <link rel="stylesheet" th:href="@{css/styles.css}">
+  <link rel="stylesheet" th:href="@{css/unsemantic-grid-responsive.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{css/styles.css}" type="text/css">
 
 </head>
 
 <body>
 
   <nav>
-    <a href="profile.html">
-      Chandra S.
+    <a th:href="@{/profile}" th:text="${#authentication.name}">
     </a>
     &bull;
-    <a href="login.html">
+    <a th:href="@{/login}">
       logout
     </a>
   </nav>
@@ -28,7 +27,7 @@
   <div class="grid-container">
 
     <div class="grid-100">
-      <a href="index.html">
+      <a th:href="@{/}">
         <h1>
           <img th:src="@{images/chefbot.svg}" height="60px">
           <br>
@@ -56,12 +55,14 @@
           </div>
           <div class="grid-30">
             <div class="flush-right">
-              <button>+ Add Recipe</button>
+              <a th:href="@{/recipes/add}">
+                <button>+ Add Recipe</button>
+              </a>
             </div>
           </div>
         </div> <div class="clear"></div>
 
-        <div class="grid-100 row addHover" th:each="${recipe : recipes}">
+        <div class="grid-100 row addHover" th:each="recipe : ${recipes}">
           <a th:href="@{detail}">
             <div class="grid-70">
               <p th:text="${recipe.name}">

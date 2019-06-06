@@ -7,7 +7,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 
 @Repository
-@RestResource(exported = false)
 public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or #recipe?.owner.name == authentication.name")

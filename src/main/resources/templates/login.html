@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.com">
 <head>
 
   <meta charset="utf-8">
@@ -8,19 +8,19 @@
   <title>Login | My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="../../../../../../Downloads/recipe-site%204/css/unsemantic-grid-responsive.css">
-  <link rel="stylesheet" href="../../../../../../Downloads/recipe-site%204/css/styles.css">
+  <link rel="stylesheet" th:href="@{css/unsemantic-grid-responsive.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{css/styles.css}" type="text/css">
 
 </head>
 
 <body>
 
   <nav>
-    <a href="signup.html">
+    <a th:href="@{signup}">
       sign-up
     </a>
     &bull;
-    <a href="login.html">
+    <a th:href="@{login}">
       login
     </a>
   </nav>
@@ -28,9 +28,9 @@
   <div class="grid-container">
 
     <div class="grid-100">
-      <a href="index.html">
+      <a th:href="@{index}">
         <h1>
-          <img src="../../../../../../Downloads/recipe-site%204/images/chefbot.svg" height="60px">
+          <img th:src="@{images/chefbot.svg}" height="60px">
           <br>
           My Recipes
         </h1>
@@ -39,21 +39,24 @@
 
     <div class="grid-100">
       <div class="recipes">
-        <div class="prefix-20 grid-60 suffix-20">
-          <p>
-            <input placeholder="Username"> </input>
-          </p>
-        </div> <div class="clear"></div>
-        <div class="prefix-20 grid-60 suffix-20">
-          <p>
-            <input placeholder="Password" type="password"> </input>
-          </p>
-        </div> <div class="clear"></div>
-        <div class="prefix-20 grid-60 suffix-20">
-          <p>
-            <button>Login</button>
-          </p>
-        </div> <div class="clear"></div>
+        <form th:action="@{/login}" method="post">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+          <div class="prefix-20 grid-60 suffix-20">
+            <p>
+              <input name="username" placeholder="Username" type="text"> </input>
+            </p>
+          </div> <div class="clear"></div>
+          <div class="prefix-20 grid-60 suffix-20">
+            <p>
+              <input name="password" id="password" placeholder="Password" type="password"> </input>
+            </p>
+          </div> <div class="clear"></div>
+          <div class="prefix-20 grid-60 suffix-20">
+            <p>
+              <button type="submit">Login</button>
+            </p>
+          </div> <div class="clear"></div>
+        </form>
       </div> <!-- recipes -->
     </div> <!-- grid-100 -->
   </div> <!-- grid-container -->
