@@ -8,8 +8,8 @@
   <title>My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" th:href="@{css/unsemantic-grid-responsive.css}" type="text/css">
-  <link rel="stylesheet" th:href="@{css/styles.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{assets/css/unsemantic-grid-responsive.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{assets/css/styles.css}" type="text/css">
 
 </head>
 
@@ -19,7 +19,7 @@
     <a th:href="@{/profile}" th:text="${#authentication.name}">
     </a>
     &bull;
-    <a th:href="@{/login}">
+    <a th:href="@{/logout}">
       logout
     </a>
   </nav>
@@ -29,7 +29,7 @@
     <div class="grid-100">
       <a th:href="@{/}">
         <h1>
-          <img th:src="@{images/chefbot.svg}" height="60px">
+          <img th:src="@{assets/images/chefbot.svg}" height="60px">
           <br>
           My Recipes
         </h1>
@@ -55,7 +55,7 @@
           </div>
           <div class="grid-30">
             <div class="flush-right">
-              <a th:href="@{/recipes/add}">
+              <a th:href="@{/add-recipe}">
                 <button>+ Add Recipe</button>
               </a>
             </div>
@@ -66,7 +66,7 @@
           <a th:href="@{detail}">
             <div class="grid-70">
               <p th:text="${recipe.name}">
-                <span><img th:src="@{images/favorite.svg}" height="12px"> </span>
+                <span><img th:src="@{assets/images/favorite.svg}" height="12px"> </span>
                 Baked Alaskan Salmon with Asparagus
               </p>
             </div>
@@ -75,8 +75,8 @@
             <div class="grid-30">
               <div class="flush-right">
                 <p>
-                  <a th:href="@{edit}"> <img th:src="@{images/edit.svg}" height="12px"> Edit </a>
-                  <a href="#"> <img th:src="@{/images/delete.svg}" height="12px"> Delete </a>
+                  <a th:href="@{|/recipes/recipe.id|}"> <img th:src="@{assets/images/edit.svg}" height="12px"> Edit </a>
+                  <a href="#"> <img th:src="@{assets/images/delete.svg}" height="12px"> Delete </a>
                 </p>
               </div>
             </div>

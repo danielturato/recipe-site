@@ -12,4 +12,9 @@ public class AccountController {
         return "login";
     }
 
+    @RequestMapping(path = "/sign-up", method = RequestMethod.GET)
+    public String signUp() {
+        return "signup";
+    }
+
 }

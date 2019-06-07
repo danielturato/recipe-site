@@ -4,9 +4,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.rest.core.annotation.RestResource;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import java.util.Optional;
+
 public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 
     @PreAuthorize("hasRole('ROLE_ADMIN') or #recipe?.owner.name == authentication.name")
@@ -23,4 +23,7 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
 
     Recipe findByName(String name);
 
+    @RestResource(exported = false)
+    @Override
+    Optional<Recipe> findById(Long aLong);
 }

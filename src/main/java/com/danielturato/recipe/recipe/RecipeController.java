@@ -23,7 +23,7 @@ public class RecipeController {
         return "index";
     }
 
-    @RequestMapping(path = "/recipes/add", method = RequestMethod.GET)
+    @RequestMapping(path = "/add-recipe", method = RequestMethod.GET)
     public String addRecipe() {
         return "edit";
     }

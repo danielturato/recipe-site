@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
 
   <meta charset="utf-8">
@@ -8,19 +8,19 @@
   <title>Sign-up | My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="../../../../../../Downloads/recipe-site%204/css/unsemantic-grid-responsive.css">
-  <link rel="stylesheet" href="../../../../../../Downloads/recipe-site%204/css/styles.css">
+  <link rel="stylesheet" th:href="@{assets/css/unsemantic-grid-responsive.css}">
+  <link rel="stylesheet" th:href="@{assets/css/styles.css}">
 
 </head>
 
 <body>
 
   <nav>
-    <a href="signup.html">
+    <a th:href="@{sign-up}">
       sign-up
     </a>
     &bull;
-    <a href="login.html">
+    <a th:href="@{login}">
       login
     </a>
   </nav>
@@ -28,9 +28,9 @@
   <div class="grid-container">
 
     <div class="grid-100">
-      <a href="index.html">
+      <a th:href="@{/}">
         <h1>
-          <img src="../../../../../../Downloads/recipe-site%204/images/chefbot.svg" height="60px">
+          <img th:src="@{assets/images/chefbot.svg}" height="60px">
           <br>
           My Recipes
         </h1>

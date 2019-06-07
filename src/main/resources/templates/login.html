@@ -8,15 +8,15 @@
   <title>Login | My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" th:href="@{css/unsemantic-grid-responsive.css}" type="text/css">
-  <link rel="stylesheet" th:href="@{css/styles.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{assets/css/unsemantic-grid-responsive.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{assets/css/styles.css}" type="text/css">
 
 </head>
 
 <body>
 
   <nav>
-    <a th:href="@{signup}">
+    <a th:href="@{sign-up}">
       sign-up
     </a>
     &bull;
@@ -28,9 +28,9 @@
   <div class="grid-container">
 
     <div class="grid-100">
-      <a th:href="@{index}">
+      <a th:href="@{/}">
         <h1>
-          <img th:src="@{images/chefbot.svg}" height="60px">
+          <img th:src="@{assets/images/chefbot.svg}" height="60px">
           <br>
           My Recipes
         </h1>

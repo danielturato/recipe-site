@@ -19,6 +19,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     private UserDetailsService detailsService;
 
     @Override
+    public void configure(org.springframework.security.config.annotation.web.builders.WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/assets/**");
+    }
+
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(detailsService)
                 .passwordEncoder(User.PASSWORD_ENCODER);
@@ -28,11 +33,14 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/css/**", "/images/**").permitAll()
+                    .antMatchers("/sign-up").permitAll()
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()
                     .loginPage("/login")
-                    .permitAll();
+                    .permitAll()
+                    .and()
+                .logout()
+                    .logoutUrl("/logout");
     }
 }
