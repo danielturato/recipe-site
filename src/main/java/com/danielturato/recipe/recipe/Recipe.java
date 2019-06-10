@@ -5,10 +5,7 @@ import com.danielturato.recipe.ingredient.Ingredient;
 import com.danielturato.recipe.core.BaseEntity;
 import com.danielturato.recipe.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +28,8 @@ public class Recipe extends BaseEntity {
     private int cookTime;
     @ManyToMany
     private List<Ingredient> ingredients;
-    @Lob
-    private Map<Integer, String> steps;
+    @ElementCollection
+    private Map<Integer, String > steps;
     @OneToOne
     private User owner;
 

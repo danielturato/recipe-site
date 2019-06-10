@@ -8,8 +8,8 @@
   <title>My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" th:href="@{assets/css/unsemantic-grid-responsive.css}" type="text/css">
-  <link rel="stylesheet" th:href="@{assets/css/styles.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{/assets/css/unsemantic-grid-responsive.css}" type="text/css">
+  <link rel="stylesheet" th:href="@{/assets/css/styles.css}" type="text/css">
 
 </head>
 
@@ -29,7 +29,7 @@
     <div class="grid-100">
       <a th:href="@{/}">
         <h1>
-          <img th:src="@{assets/images/chefbot.svg}" height="60px">
+          <img th:src="@{/assets/images/chefbot.svg}" height="60px">
           <br>
           My Recipes
         </h1>
@@ -63,10 +63,10 @@
         </div> <div class="clear"></div>
 
         <div class="grid-100 row addHover" th:each="recipe : ${recipes}">
-          <a th:href="@{detail}">
+          <a th:href="@{'/recipes/' + ${recipe.id}}">
             <div class="grid-70">
               <p th:text="${recipe.name}">
-                <span><img th:src="@{assets/images/favorite.svg}" height="12px"> </span>
+                <span><img th:src="@{/assets/images/favorite.svg}" height="12px"> </span>
                 Baked Alaskan Salmon with Asparagus
               </p>
             </div>
@@ -75,8 +75,8 @@
             <div class="grid-30">
               <div class="flush-right">
                 <p>
-                  <a th:href="@{|/recipes/recipe.id|}"> <img th:src="@{assets/images/edit.svg}" height="12px"> Edit </a>
-                  <a href="#"> <img th:src="@{assets/images/delete.svg}" height="12px"> Delete </a>
+                  <a th:href="@{|/recipes/recipe.id|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
+                  <a href="#"> <img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
                 </p>
               </div>
             </div>

@@ -40,7 +40,7 @@
     <div class="grid-100">
 
       <div class="recipes">
-          <form th:action="@{/new-recipe}" method="post" th:object="${recipe}">
+          <form th:action="@{/add-recipe}" method="post" th:object="${recipe}" enctype="multipart/form-data">
             <div class="grid-100 row controls">
               <div class="grid-50">
                 <h2 th:text="${task}"> Recipe Editor </h2>
@@ -53,7 +53,7 @@
                     </a>
                 </div>
               </div>
-        </div> <div class="clear"></div>
+            </div> <div class="clear"></div>
             <div class="grid-100 row">
               <div class="grid-20">
                 <p class="label-spacing">
@@ -62,7 +62,7 @@
               </div>
               <div class="grid-40">
                 <p>
-                    <input type="file" th:field="*{photo}" placeholder="Upload Photo">
+                    <input type="file" name="image" placeholder="Upload Photo">
                 </p>
               </div>
             </div> <div class="clear"></div>
@@ -102,11 +102,8 @@
               <div class="grid-30">
                 <p>
                   <select th:field="*{category}">
-                    <option value="all_categories">All Categories</option>
-                    <option value="breakfast">Breakfast</option>
-                    <option value="lunch">Lunch</option>
-                    <option value="dinner">Dinner</option>
-                    <option value="dessert">Dessert</option>
+                    <option th:each="category : ${T(com.danielturato.recipe.category.Category).values()}"
+                            th:value="${category}" th:text="${category}">All Categories</option>
                   </select>
                 </p>
               </div>

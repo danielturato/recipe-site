@@ -5,9 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -42,11 +41,18 @@ public class RecipeController {
     }
 
     @RequestMapping(path = "/add-recipe", method = RequestMethod.POST)
-    public String persistRecipe(@Valid Recipe recipe) {
+    public String persistRecipe(@Valid Recipe recipe, @RequestParam("image") MultipartFile photo) {
         recipe.setOwner(userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
-        recipeService.save(recipe);
+        recipeService.save(recipe, photo);
         return "redirect:/";
     }
 
+    @RequestMapping(path = "/recipes/{id}", method = RequestMethod.GET)
+    public String getRecipe(@PathVariable Long id, Model model) {
+        Recipe recipe = recipeService.findById(id);
+        model.addAttribute("recipe", recipe);
+
+        return "detail";
+    }
 
 }
