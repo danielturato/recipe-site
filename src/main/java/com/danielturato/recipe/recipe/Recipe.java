@@ -42,18 +42,21 @@ public class Recipe extends BaseEntity {
         steps = new TreeMap<>();
     }
 
-    public Recipe(String name, String description, Category category, int prepTime, int cookTime, User owner) {
+    public Recipe(String name, String description, Category category, int prepTime, int cookTime) {
         this();
         this.name = name;
         this.description = description;
         this.category = category;
         this.prepTime = prepTime;
         this.cookTime = cookTime;
-        this.owner = owner;
     }
 
     public User getOwner() {
         return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public void addIngredient(Ingredient ingredient) {
