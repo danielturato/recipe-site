@@ -23,13 +23,7 @@ public class RecipeServiceImpl implements RecipeService {
     @Transactional
     public void save(Recipe recipe, MultipartFile photo) {
         try {
-            Byte[] bytes = new Byte[photo.getBytes().length];
-            int i = 0;
-            for (byte b : photo.getBytes()) {
-                bytes[i++] = b;
-            }
-
-            recipe.setPhoto(bytes);
+            recipe.setPhoto(photo.getBytes());
             recipes.save(recipe);
         } catch (IOException ex) {
             ex.printStackTrace();

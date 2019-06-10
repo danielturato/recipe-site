@@ -40,7 +40,7 @@
     <div class="grid-100">
 
       <div class="recipes">
-          <form th:action="@{/add-recipe}" method="post" th:object="${recipe}" enctype="multipart/form-data">
+          <form th:action="@{/recipes/add}" method="post" th:object="${recipe}" enctype="multipart/form-data">
             <div class="grid-100 row controls">
               <div class="grid-50">
                 <h2 th:text="${task}"> Recipe Editor </h2>
@@ -155,42 +155,6 @@
                     <p class="label-spacing">
                       <label> Quantity <label>
                       </p>
-                    </div>
-
-                    <div class="ingredient-row">
-                      <div class="prefix-20 grid-30">
-                        <p>
-                          <input/>
-                        </p>
-                      </div>
-                      <div class="grid-30">
-                        <p>
-                          <input/>
-                        </p>
-                      </div>
-                      <div class="grid-10 suffix-10">
-                        <p>
-                          <input/>
-                        </p>
-                      </div>
-                    </div>
-
-                    <div class="ingredient-row">
-                      <div class="prefix-20 grid-30">
-                        <p>
-                          <input/>
-                        </p>
-                      </div>
-                      <div class="grid-30">
-                        <p>
-                          <input/>
-                        </p>
-                      </div>
-                      <div class="grid-10 suffix-10">
-                        <p>
-                          <input/>
-                        </p>
-                      </div>
                     </div>
 
                     <div class="ingredient-row">

@@ -15,7 +15,7 @@ import java.util.TreeMap;
 @Entity
 public class Recipe extends BaseEntity {
     @Lob
-    private Byte[] photo;
+    private byte[] photo;
     @NotNull
     private String name;
     @NotNull
@@ -64,11 +64,11 @@ public class Recipe extends BaseEntity {
         steps.put(step, instruction);
     }
 
-    public Byte[] getPhoto() {
+    public byte[] getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Byte[] photo) {
+    public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
 

@@ -28,7 +28,7 @@ public class RecipeController {
         return "index";
     }
 
-    @RequestMapping(path = "/add-recipe", method = RequestMethod.GET)
+    @RequestMapping(path = "/recipes/add", method = RequestMethod.GET)
     public String addRecipe(Model model) {
         model.addAttribute("task", "Add recipe");
         model.addAttribute("buttonAction", "Add");
@@ -40,7 +40,7 @@ public class RecipeController {
         return "edit";
     }
 
-    @RequestMapping(path = "/add-recipe", method = RequestMethod.POST)
+    @RequestMapping(path = "/recipes/add", method = RequestMethod.POST)
     public String persistRecipe(@Valid Recipe recipe, @RequestParam("image") MultipartFile photo) {
         recipe.setOwner(userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
         recipeService.save(recipe, photo);
@@ -54,5 +54,12 @@ public class RecipeController {
 
         return "detail";
     }
+
+    @RequestMapping("/recipes/{id}.png")
+    @ResponseBody
+    public byte[] recipeImage(@PathVariable Long id) {
+        return recipeService.findById(id).getPhoto();
+    }
+
 
 }
