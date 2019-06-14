@@ -1,5 +1,6 @@
 package com.danielturato.recipe.recipe;
 
+import com.danielturato.recipe.user.User;
 import com.danielturato.recipe.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -42,9 +43,13 @@ public class RecipeController {
 
     @RequestMapping(path = "/recipes/add", method = RequestMethod.POST)
     public String persistRecipe(@Valid Recipe recipe, @RequestParam("image") MultipartFile photo) {
-        recipe.setOwner(userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
+        User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        recipe.setOwner(user);
+        user.addFavorite(recipe);
         recipeService.save(recipe, photo);
-        return "redirect:/";
+        userService.save(user);
+
+        return "redirect:/recipes";
     }
 
     @RequestMapping(path = "/recipes/{id}", method = RequestMethod.GET)

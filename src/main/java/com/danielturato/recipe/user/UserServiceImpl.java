@@ -13,4 +13,9 @@ public class UserServiceImpl implements UserService {
     public User findByUsername(String username) {
         return users.findByUsername(username);
     }
+
+    @Override
+    public void save(User user) {
+        users.save(user);
+    }
 }

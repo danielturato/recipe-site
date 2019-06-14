@@ -26,7 +26,7 @@ public class Recipe extends BaseEntity {
     private int prepTime;
     @NotNull
     private int cookTime;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Ingredient> ingredients;
     @ElementCollection
     private Map<Integer, String > steps;
