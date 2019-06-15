@@ -40,7 +40,8 @@
     <div class="grid-100">
 
       <div class="recipes">
-          <form th:action="@{/recipes/add}" method="post" th:object="${recipe}" enctype="multipart/form-data">
+          <form th:action="@{${action}}" method="post" th:object="${recipe}" enctype="multipart/form-data">
+            <input type="hidden" th:value="*{id}" th:field="*{id}">
             <div class="grid-100 row controls">
               <div class="grid-50">
                 <h2 th:text="${task}"> Recipe Editor </h2>
@@ -61,8 +62,14 @@
                 </p>
               </div>
               <div class="grid-40">
+                <img id="recipePhoto" th:if="${photo}" th:src="@{|/recipes/*{id}.png|}" alt="photo">
                 <p>
-                    <input type="file" name="image" placeholder="Upload Photo">
+                    <input id="photoInput" th:type="${#strings.equals(task, 'Edit recipe') ? 'hidden' : 'file'}" name="image" placeholder="Upload Photo">
+                </p>
+              </div>
+              <div th:if="${#strings.equals(task, 'Edit recipe')}" class="prefix-20 grid-80 add-row">
+                <p>
+                  <button id="editPhoto" value="notEdited" type="button">Change recipe photo</button>
                 </p>
               </div>
             </div> <div class="clear"></div>

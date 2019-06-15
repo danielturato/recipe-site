@@ -33,6 +33,8 @@ public class RecipeController {
     public String addRecipe(Model model) {
         model.addAttribute("task", "Add recipe");
         model.addAttribute("buttonAction", "Add");
+        model.addAttribute("action", "/recipes/add");
+        model.addAttribute("photo", false);
 
         if (!model.containsAttribute("recipe")) {
             model.addAttribute("recipe", new Recipe());
@@ -51,6 +53,35 @@ public class RecipeController {
 
         return "redirect:/recipes";
     }
+
+    @RequestMapping(path = "/recipes/{id}/edit", method = RequestMethod.GET)
+    public String editRecipe(Model model, @PathVariable Long id) {
+        Recipe recipe = recipeService.findById(id);
+        model.addAttribute("recipe", recipe);
+        model.addAttribute("task", "Edit recipe");
+        model.addAttribute("buttonAction", "Save");
+        model.addAttribute("action", String.format("/recipes/%d/edit", id));
+
+        if (recipe.getPhoto() != null) {
+            model.addAttribute("photo", true);
+        }
+
+        return "edit";
+    }
+
+    @RequestMapping(path = "/recipes/{id}/edit")
+    public String updateRecipe(@Valid Recipe recipe, @PathVariable Long id,
+                               @RequestParam(required = false, value = "image") MultipartFile photo) {
+        if (photo == null) {
+            recipeService.save(recipe, recipeService.findById(id).getPhoto());
+        } else {
+            recipeService.save(recipe, photo);
+        }
+
+
+        return String.format("redirect:/recipes/%d", id);
+    }
+
 
     @RequestMapping(path = "/recipes/{id}", method = RequestMethod.GET)
     public String getRecipe(@PathVariable Long id, Model model) {

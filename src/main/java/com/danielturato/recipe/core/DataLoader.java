@@ -26,12 +26,5 @@ public class DataLoader implements ApplicationRunner {
             users.save(new User("admin", "password", new String[]{"ROLE_ADMIN", "ROLE_USER"}));
         }
 
-//        User user = users.findByUsername("admin");
-//        user.setFavorites(new ArrayList<>());
-//        users.save(user);
-//
-//        for(Recipe recipe : recipes.findAll()) {
-//            recipes.delete(recipe);
-//        }
     }
 }

@@ -19,6 +19,12 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    public void save(Recipe recipe, byte[] photo) {
+        recipe.setPhoto(photo);
+        recipes.save(recipe);
+    }
+
+    @Override
     public void save(Recipe recipe, MultipartFile photo) {
         try {
             recipe.setPhoto(photo.getBytes());
@@ -47,5 +53,10 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public List<Recipe> findAll() {
         return (List<Recipe>) recipes.findAll();
+    }
+
+    @Override
+    public void delete(Recipe recipe) {
+        recipes.delete(recipe);
     }
 }

@@ -9,7 +9,7 @@ import javax.persistence.MappedSuperclass;
 public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private final Long id;
+    private Long id;
 
     protected BaseEntity() {
         this.id = null;
@@ -18,4 +18,9 @@ public abstract class BaseEntity {
     public Long getId() {
         return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
 }
