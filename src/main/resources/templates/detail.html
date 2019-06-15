@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
   <meta charset="utf-8">
@@ -186,7 +186,7 @@
 
                   <div class="step-row" th:each="step : ${recipe.steps}">
                     <div class="prefix-20 grid-80">
-                      <p th:text="${step.key + '. ' + step.value}">
+                      <p th:text="${step}">
                         1. Crack your eggs and beat them.
                       </p>
                     </div>

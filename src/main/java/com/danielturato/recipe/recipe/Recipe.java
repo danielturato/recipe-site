@@ -29,14 +29,14 @@ public class Recipe extends BaseEntity {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Ingredient> ingredients;
     @ElementCollection
-    private Map<Integer, String > steps;
-    @OneToOne
+    private List<String> steps;
+    @ManyToOne
     private User owner;
 
     protected Recipe() {
         super();
         ingredients = new ArrayList<>();
-        steps = new TreeMap<>();
+        steps = new ArrayList<>();
     }
 
     public Recipe(String name, String description, Category category, int prepTime, int cookTime) {
@@ -60,8 +60,8 @@ public class Recipe extends BaseEntity {
         ingredients.add(ingredient);
     }
 
-    public void addStep(int step, String instruction) {
-        steps.put(step, instruction);
+    public void addStep(String instruction) {
+        steps.add(instruction);
     }
 
     public byte[] getPhoto() {
@@ -120,11 +120,11 @@ public class Recipe extends BaseEntity {
         this.ingredients = ingredients;
     }
 
-    public Map<Integer, String> getSteps() {
+    public List<String> getSteps() {
         return steps;
     }
 
-    public void setSteps(Map<Integer, String> steps) {
+    public void setSteps(List<String> steps) {
         this.steps = steps;
     }
 }

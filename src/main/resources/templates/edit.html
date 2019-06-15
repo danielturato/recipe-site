@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.com">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
   <meta charset="utf-8">
@@ -197,19 +197,17 @@
                         </p>
                       </div>
 
-                      <div th:each="step : *{steps}">
-                        <div class="step-row">
-                          <div class="prefix-20 grid-80">
-                            <p>
-                              <input/>
-                            </p>
-                          </div>
+                      <div class="step-row" th:each="step : *{steps}">
+                        <div class="prefix-20 grid-80">
+                          <p>
+                            <input th:field="*{steps[__${stepStat.index}__]}"/>
+                          </p>
                         </div>
                       </div>
 
-                      <div class="prefix-20 grid-80 add-row">
+                      <div id="newStepDiv" class="prefix-20 grid-80 add-row">
                         <p>
-                          <button>+ Add Another Step</button>
+                          <button id="newStep" type="button">+ Add Another Step</button>
                         </p>
                       </div>
 
