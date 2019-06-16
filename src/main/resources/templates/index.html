@@ -44,7 +44,7 @@
           <div class="grid-30">
             <select>
               <option th:each="category : ${T(com.danielturato.recipe.category.Category).values()}"
-                      th:value="${category}" th:text="${category}">All Categories</option>
+                      th:value="${category}" th:text="${category.label}">All Categories</option>
             </select>
           </div>
           <div class="grid-40">
