@@ -3,6 +3,7 @@ package com.danielturato.recipe.recipe;
 import com.danielturato.recipe.user.User;
 import com.danielturato.recipe.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +27,10 @@ public class RecipeController {
     @GetMapping({"/", "/recipes"})
     public String index(Model model) {
         model.addAttribute("recipes", recipeService.findAll());
+        model.addAttribute("favs", userService
+                    .findByUsername(
+                            SecurityContextHolder.getContext().getAuthentication().getName())
+                    .getFavorites());
         return "index";
     }
 

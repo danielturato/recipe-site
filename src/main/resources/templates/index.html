@@ -43,11 +43,8 @@
         <div class="grid-100 row controls">
           <div class="grid-30">
             <select>
-              <option value="">All Categories</option>
-              <option value="breakfast">Breakfast</option>
-              <option value="lunch">Lunch</option>
-              <option value="dinner">Dinner</option>
-              <option value="dessert">Dessert</option>
+              <option th:each="category : ${T(com.danielturato.recipe.category.Category).values()}"
+                      th:value="${category}" th:text="${category}">All Categories</option>
             </select>
           </div>
           <div class="grid-40">
@@ -63,21 +60,20 @@
         </div> <div class="clear"></div>
 
         <div class="grid-100 row addHover" th:each="recipe : ${recipes}">
-          <a th:href="@{'/recipes/' + ${recipe.id}}">
-            <div class="grid-70">
-              <p th:text="${recipe.name}">
-                <span><img th:src="@{/assets/images/favorite.svg}" height="12px"> </span>
-                Baked Alaskan Salmon with Asparagus
-              </p>
-            </div>
-          </a>
+          <div class="grid-70">
+            <p>
+              <span th:if="${#lists.contains(favs, recipe)}"><img th:src="@{/assets/images/favorited.svg}" height="12px"> </span>
+              <span th:if="${!#lists.contains(favs, recipe)}"><img th:src="@{/assets/images/favorite.svg}" height="12px"> </span>
+              <a th:href="@{|/recipes/${recipe.id}|}" th:text="${recipe.name}"></a>
+            </p>
+          </div>
           <form th:id="|deleteForm${recipe.id}|" th:action="@{|/recipes/${recipe.id}/delete|}" method="post">
             <div class="hoverBlock">
               <div class="grid-30">
                 <div class="flush-right">
                   <p>
                     <a th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
-                    <button th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" type="button"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </button>
+                    <a th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" style="cursor: pointer"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
                   </p>
                 </div>
               </div>
