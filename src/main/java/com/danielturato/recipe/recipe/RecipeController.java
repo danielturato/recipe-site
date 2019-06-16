@@ -91,6 +91,13 @@ public class RecipeController {
         return "detail";
     }
 
+    @RequestMapping(path = "/recipes/{id}/delete", method = RequestMethod.POST)
+    public String deleteRecipe(@PathVariable Long id) {
+        recipeService.deleteById(id);
+
+        return "redirect:/recipes";
+    }
+
     @RequestMapping("/recipes/{id}.png")
     @ResponseBody
     public byte[] recipeImage(@PathVariable Long id) {

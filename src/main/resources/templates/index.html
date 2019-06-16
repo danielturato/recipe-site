@@ -71,16 +71,18 @@
               </p>
             </div>
           </a>
-          <div class="hoverBlock">
-            <div class="grid-30">
-              <div class="flush-right">
-                <p>
-                  <a th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
-                  <a href="#"> <img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
-                </p>
+          <form th:id="|deleteForm${recipe.id}|" th:action="@{|/recipes/${recipe.id}/delete|}" method="post">
+            <div class="hoverBlock">
+              <div class="grid-30">
+                <div class="flush-right">
+                  <p>
+                    <a th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
+                    <button th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" type="button"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </button>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </form>
         </div> <div class="clear"></div>
 
         <div class="row">&nbsp;</div>
@@ -89,4 +91,6 @@
     </div> <!-- grid-100 -->
   </div> <!-- grid-container -->
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script th:src="@{/assets/js/app.js}"></script>
 </html>

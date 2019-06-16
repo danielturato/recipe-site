@@ -32,3 +32,15 @@ $('#editPhoto').click(function () {
     }
 
 });
+
+
+$("[id ^= 'deleteButton']").each(function () {
+    $(this).click(function () {
+        var result = confirm("Are you sure you want to delete this recipe?");
+
+        if (result) {
+            var form = '#deleteForm' + $(this).val();
+            $(form).submit();
+        }
+    })
+});
