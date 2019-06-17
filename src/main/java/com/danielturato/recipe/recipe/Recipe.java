@@ -6,7 +6,9 @@ import com.danielturato.recipe.core.BaseEntity;
 import com.danielturato.recipe.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,14 +19,18 @@ public class Recipe extends BaseEntity {
     @Lob
     private byte[] photo;
     @NotNull
+    @Size(min = 1, max = 24)
     private String name;
     @NotNull
+    @Size(min = 1, max = 144)
     private String description;
     @NotNull
     private Category category;
     @NotNull
+    @Min(0)
     private int prepTime;
     @NotNull
+    @Min(0)
     private int cookTime;
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Ingredient> ingredients;

@@ -49,10 +49,9 @@ $("#signUpButton").click(function () {
    var passwordTwo = $("#passwordTwo").val();
 
    if (passwordOne === passwordTwo) {
-       alert("They equal");
        $("#signUpForm").submit();
    } else {
-       alert("Not equal");
+       alert("The passwords don't match!");
    }
 
 });
@@ -60,3 +59,10 @@ $("#signUpButton").click(function () {
 $('#favButton').click(function () {
    $('#favButtonForm').submit();
 });
+
+$('#flashMessage').slideDown(function () {
+   setTimeout(function () {
+       $('#flashMessage').slideUp();
+   }, 5000);
+});
+

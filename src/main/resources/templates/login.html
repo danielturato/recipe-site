@@ -37,6 +37,18 @@
       </a>
     </div>
 
+    <div id="flashMessage" th:if="${flash}">
+      <div class="grid-100">
+        <div class="recipes">
+          <div class="grid-50 row prefix-25" style="text-align: center; background-color: #7f9e40; color: #f3f6ee;">
+            <p th:text="${flash.message}">
+              This is a test.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="grid-100">
       <div class="recipes">
         <form th:action="@{/login}" method="post">
@@ -61,4 +73,6 @@
     </div> <!-- grid-100 -->
   </div> <!-- grid-container -->
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script th:src="@{/assets/js/app.js}"></script>
 </html>

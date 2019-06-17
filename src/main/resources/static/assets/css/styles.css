@@ -107,4 +107,30 @@ button {
 .flush-right {
   float: right; }
 
+.recipes.rowSuccess {
+  background: #7f9e40;
+  color: #f3f6ee;
+  border-top: 1px solid #f6ebe5;
+  border-bottom: 1px solid #f6ebe5;
+}
+
+.recipes.rowFailure {
+  background: #ac4343;
+  color: #f2e2e2;;
+  border-top: 1px solid #f6ebe5;
+  border-bottom: 1px solid #f6ebe5;
+}
+
+.recipes .rowSuccess:first-child {
+  border-radius: 8px 8px 0 0; }
+.recipes .rowSuccess:last-child {
+  border-radius: 0 0 8px 8px; }
+
+.recipes .rowFailure:first-child {
+  border-radius: 8px 8px 0 0; }
+.recipes .rowFailure:last-child {
+  border-radius: 0 0 8px 8px; }
+
+
+
 /*# sourceMappingURL=styles.css.map */

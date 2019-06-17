@@ -1,5 +1,6 @@
 package com.danielturato.recipe.user;
 
+import com.danielturato.recipe.flash.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,10 +48,10 @@ public class UserController {
     }
 
     @RequestMapping(path = "/sign-up", method = RequestMethod.POST)
-    public String newUser(@Valid User user) {
+    public String newUser(@Valid User user, RedirectAttributes redirectAttributes) {
         user.setRoles(new String[]{"ROLE_USER"});
         userService.save(user);
-
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Account created. Please login below.", FlashMessage.Status.SUCCESS));
         return "redirect:/login";
     }
 
