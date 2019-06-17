@@ -3,6 +3,8 @@ package com.danielturato.recipe.recipe;
 import com.danielturato.recipe.user.User;
 import com.danielturato.recipe.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,8 +59,9 @@ public class RecipeController {
         return "redirect:/recipes";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #recipeRepository.findById(#id).get().owner.username == #authentication.name")
     @RequestMapping(path = "/recipes/{id}/edit", method = RequestMethod.GET)
-    public String editRecipe(Model model, @PathVariable Long id) {
+    public String editRecipe(Model model, @PathVariable("id") Long id) {
         Recipe recipe = recipeService.findById(id);
         model.addAttribute("recipe", recipe);
         model.addAttribute("task", "Edit recipe");
@@ -72,8 +75,9 @@ public class RecipeController {
         return "edit";
     }
 
-    @RequestMapping(path = "/recipes/{id}/edit")
-    public String updateRecipe(@Valid Recipe recipe, @PathVariable Long id,
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #recipeServiceImpl.findById(#id)?.owner.username == #authentication.name")
+    @RequestMapping(path = "/recipes/{id}/edit", method = RequestMethod.POST)
+    public String updateRecipe(@Valid Recipe recipe, @PathVariable("id") Long id,
                                @RequestParam(required = false, value = "image") MultipartFile photo) {
         if (photo == null) {
             recipeService.save(recipe, recipeService.findById(id).getPhoto());
@@ -101,8 +105,9 @@ public class RecipeController {
         return "detail";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN') or #recipeServiceImpl.findById(#id)?.owner.username == #authentication.name")
     @RequestMapping(path = "/recipes/{id}/delete", method = RequestMethod.POST)
-    public String deleteRecipe(@PathVariable Long id) {
+    public String deleteRecipe(@PathVariable("id") Long id) {
         removeFavorites(recipeService.findById(id));
         recipeService.deleteById(id);
 

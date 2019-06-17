@@ -1,6 +1,7 @@
 package com.danielturato.recipe.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,13 @@ public class UserController {
     @RequestMapping(path = "/users/{username}", method = RequestMethod.GET)
     public String profile(@PathVariable String username, Model model) {
         model.addAttribute("user", userService.findByUsername(username));
+        model.addAttribute("favs", getUser()
+                .getFavorites());
         return "profile";
+    }
+
+    private User getUser() {
+        return userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
 }

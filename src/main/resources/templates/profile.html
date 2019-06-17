@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
 
-  <title th:text="|${#authentication.name}. - My Recipes|">Chandra S. | My Recipes</title>
+  <title th:text="|${user.username} - Recipes|">Chandra S. | My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" th:href="@{/assets/css/unsemantic-grid-responsive.css}">
@@ -31,8 +31,7 @@
       <a th:href="@{/recipes}">
         <h1>
           <img th:src="@{/assets/images/chefbot.svg}" height="60px">
-          <br>
-          My Recipes
+          <br th:text="|${user.username}'s recipes|">
         </h1>
       </a>
     </div>
@@ -43,14 +42,15 @@
 
         <div class="grid-100 row controls">
           <div class="grid-100">
-            <h2 th:text="${#authentication.name}"> Chandra S. </h2>
+            <h2 th:text="${user.username}"> Chandra S. </h2>
           </div>
         </div> <div class="clear"></div>
 
         <div class="grid-100 row addHover" th:each="recipe : ${user.favorites}">
           <div class="grid-70">
             <p>
-              <span><img th:src="@{/assets/images/favorited.svg}" height="12px"> </span>
+              <span th:if="${#lists.contains(favs, recipe)}"><img th:src="@{/assets/images/favorited.svg}" height="12px"> </span>
+              <span th:if="${!#lists.contains(favs, recipe)}"><img th:src="@{/assets/images/favorite.svg}" height="12px"> </span>
               <a th:href="@{|/recipes/${recipe.id}|}" th:text="${recipe.name}"></a>
             </p>
           </div>
@@ -58,10 +58,10 @@
             <div class="hoverBlock">
               <div class="grid-30">
                 <div class="flush-right">
-                  <p>
-                    <a th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
-                    <a th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" style="cursor: pointer"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
-                  </p>
+                  <a th:if="${#strings.equals(#authentication.name, recipe.owner.username) or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                     th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
+                  <a th:if="${#strings.equals(#authentication.name, recipe.owner.username) or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                     th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" style="cursor: pointer"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
                 </div>
               </div>
             </div>
