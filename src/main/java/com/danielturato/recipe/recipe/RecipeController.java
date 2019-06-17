@@ -3,7 +3,6 @@ package com.danielturato.recipe.recipe;
 import com.danielturato.recipe.user.User;
 import com.danielturato.recipe.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,9 +27,7 @@ public class RecipeController {
     @GetMapping({"/", "/recipes"})
     public String index(Model model) {
         model.addAttribute("recipes", recipeService.findAll());
-        model.addAttribute("favs", userService
-                    .findByUsername(
-                            SecurityContextHolder.getContext().getAuthentication().getName())
+        model.addAttribute("favs", getUser()
                     .getFavorites());
         return "index";
     }
@@ -51,7 +48,7 @@ public class RecipeController {
 
     @RequestMapping(path = "/recipes/add", method = RequestMethod.POST)
     public String persistRecipe(@Valid Recipe recipe, @RequestParam("image") MultipartFile photo) {
-        User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = getUser();
         recipe.setOwner(user);
         user.addFavorite(recipe);
         recipeService.save(recipe, photo);
@@ -92,7 +89,14 @@ public class RecipeController {
     @RequestMapping(path = "/recipes/{id}", method = RequestMethod.GET)
     public String getRecipe(@PathVariable Long id, Model model) {
         Recipe recipe = recipeService.findById(id);
+        User user = getUser();
         model.addAttribute("recipe", recipe);
+        if (user.isAFavorite(recipe)) {
+            model.addAttribute("fav", true);
+        } else {
+            model.addAttribute("fav", false);
+        }
+
 
         return "detail";
     }
@@ -103,6 +107,24 @@ public class RecipeController {
         recipeService.deleteById(id);
 
         return "redirect:/recipes";
+    }
+
+    @RequestMapping(path = "/recipes/{id}/favorite", method = RequestMethod.POST)
+    public String toggleFavorite(@PathVariable Long id) {
+        User user = getUser();
+        Recipe recipe = recipeService.findById(id);
+        if (user.isAFavorite(recipe)) {
+            user.removeFavorite(recipe);
+        } else {
+            user.addFavorite(recipe);
+        }
+        userService.save(user);
+
+        return String.format("redirect:/recipes/%d", id);
+    }
+
+    private User getUser() {
+        return userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
     @RequestMapping("/recipes/{id}.png")

@@ -45,13 +45,16 @@
           <div class="grid-50">
             <h2 th:text="${recipe.name}"> Brioche French Toast with Nutella </h2>
           </div>
-          <div class="grid-50">
-            <h2 class="flush-right">
-              <a href="#">
-                <img th:src="@{/assets/images/favorite.svg}" height="16px">
-              </a>
-            </h2>
-          </div>
+          <form id="favButtonForm" th:action="@{|/recipes/${recipe.id}/favorite|}" method="post">
+            <div class="grid-50">
+              <h2 class="flush-right">
+                <a id="favButton" style="cursor: pointer">
+                  <img th:if="${!fav}" th:src="@{/assets/images/favorite.svg}" height="16px">
+                  <img th:if="${fav}" th:src="@{/assets/images/favorited.svg}" height="16px">
+                </a>
+              </h2>
+            </div>
+          </form>
         </div> <div class="clear"></div>
 
         <div class="grid-100 row">
@@ -212,4 +215,6 @@
             </div> <!-- grid-100 -->
           </div> <!-- grid-container -->
         </body>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script th:src="@{/assets/js/app.js}"></script>
         </html>

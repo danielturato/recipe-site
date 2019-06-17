@@ -45,7 +45,6 @@ $("[id ^= 'deleteButton']").each(function () {
 });
 
 $("#signUpButton").click(function () {
-    alert("In button method");
    var passwordOne = $("#passwordOne").val();
    var passwordTwo = $("#passwordTwo").val();
 
@@ -58,3 +57,6 @@ $("#signUpButton").click(function () {
 
 });
 
+$('#favButton').click(function () {
+   $('#favButtonForm').submit();
+});

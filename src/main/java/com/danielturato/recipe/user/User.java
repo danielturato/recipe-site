@@ -43,6 +43,14 @@ public class User extends BaseEntity {
         favorites.add(recipe);
     }
 
+    public void removeFavorite(Recipe recipe) {
+        favorites.remove(recipe);
+    }
+
+    public boolean isAFavorite(Recipe recipe) {
+        return favorites.contains(recipe);
+    }
+
     public String getUsername() {
         return username;
     }
