@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+
+        <title>Access Denied</title>
+
+        <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" th:href="@{/assets/css/unsemantic-grid-responsive.css}" type="text/css">
+        <link rel="stylesheet" th:href="@{/assets/css/styles.css}" type="text/css">
+
+    </head>
+
+    <body>
+        <div class="grid-container">
+            <div class="grid-100">
+                <h1 th:text="|Sorry ${#authentication.name}, you are not allowed on this page!|"></h1>
+                <div class="prefix-20 grid-60 suffix-20">
+                    <p>
+                        <a th:href="@{/recipes}">Home</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script th:src="@{/assets/js/app.js}"></script>
+</html>

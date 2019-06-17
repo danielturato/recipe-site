@@ -3,7 +3,6 @@ package com.danielturato.recipe.recipe;
 import com.danielturato.recipe.user.User;
 import com.danielturato.recipe.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -128,6 +127,11 @@ public class RecipeController {
         return String.format("redirect:/recipes/%d", id);
     }
 
+    @RequestMapping(path = "/accessDenied")
+    public String accessDenied() {
+        return "accessDenied";
+    }
+
     private User getUser() {
         return userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
     }
@@ -137,7 +141,6 @@ public class RecipeController {
     public byte[] recipeImage(@PathVariable Long id) {
         return recipeService.findById(id).getPhoto();
     }
-
 
     private void removeFavorites(Recipe recipe) {
         for (User user : userService.findAll()) {
