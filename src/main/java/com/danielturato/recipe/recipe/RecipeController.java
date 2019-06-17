@@ -59,7 +59,7 @@ public class RecipeController {
         return "redirect:/recipes";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #recipeRepository.findById(#id).get().owner.username == #authentication.name")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeRepository.findById(#id).get()?.owner.username == authentication.name")
     @RequestMapping(path = "/recipes/{id}/edit", method = RequestMethod.GET)
     public String editRecipe(Model model, @PathVariable("id") Long id) {
         Recipe recipe = recipeService.findById(id);
@@ -75,7 +75,7 @@ public class RecipeController {
         return "edit";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #recipeServiceImpl.findById(#id)?.owner.username == #authentication.name")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeRepository.findById(#id).get()?.owner.username == authentication.name")
     @RequestMapping(path = "/recipes/{id}/edit", method = RequestMethod.POST)
     public String updateRecipe(@Valid Recipe recipe, @PathVariable("id") Long id,
                                @RequestParam(required = false, value = "image") MultipartFile photo) {
@@ -105,7 +105,7 @@ public class RecipeController {
         return "detail";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or #recipeServiceImpl.findById(#id)?.owner.username == #authentication.name")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeRepository.findById(#id).get()?.owner.username == authentication.name")
     @RequestMapping(path = "/recipes/{id}/delete", method = RequestMethod.POST)
     public String deleteRecipe(@PathVariable("id") Long id) {
         removeFavorites(recipeService.findById(id));
