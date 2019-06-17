@@ -8,8 +8,8 @@
   <title>Sign-up | My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" th:href="@{assets/css/unsemantic-grid-responsive.css}">
-  <link rel="stylesheet" th:href="@{assets/css/styles.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/unsemantic-grid-responsive.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/styles.css}">
 
 </head>
 
@@ -30,7 +30,7 @@
     <div class="grid-100">
       <a th:href="@{/}">
         <h1>
-          <img th:src="@{assets/images/chefbot.svg}" height="60px">
+          <img th:src="@{/assets/images/chefbot.svg}" height="60px">
           <br>
           My Recipes
         </h1>
@@ -39,28 +39,32 @@
 
     <div class="grid-100">
       <div class="recipes">
-        <div class="prefix-20 grid-60 suffix-20">
-          <p>
-            <input placeholder="Username"> </input>
-          </p>
-        </div> <div class="clear"></div>
-        <div class="prefix-20 grid-60 suffix-20">
-          <p>
-            <input placeholder="Password" type="password"> </input>
-          </p>
-        </div> <div class="clear"></div>
-        <div class="prefix-20 grid-60 suffix-20">
-          <p>
-            <input placeholder="Password Again" type="password"> </input>
-          </p>
-        </div> <div class="clear"></div>
-        <div class="prefix-20 grid-60 suffix-20">
-          <p>
-            <button>Sign-up</button>
-          </p>
-        </div> <div class="clear"></div>
+        <form id="signUpForm" th:action="@{/sign-up}" method="post" th:object="${user}">
+          <div class="prefix-20 grid-60 suffix-20">
+            <p>
+              <input th:field="*{username}" placeholder="Username"> </input>
+            </p>
+          </div> <div class="clear"></div>
+          <div class="prefix-20 grid-60 suffix-20">
+            <p>
+              <input id="passwordOne" th:field="*{password}" placeholder="Password" type="password"> </input>
+            </p>
+          </div> <div class="clear"></div>
+          <div class="prefix-20 grid-60 suffix-20">
+            <p>
+              <input id="passwordTwo" placeholder="Password Again" type="password"> </input>
+            </p>
+          </div> <div class="clear"></div>
+          <div class="prefix-20 grid-60 suffix-20">
+            <p>
+              <button id="signUpButton" type="button">Sign-up</button>
+            </p>
+          </div> <div class="clear"></div>
+        </form>
       </div> <!-- recipes -->
     </div> <!-- grid-100 -->
   </div> <!-- grid-container -->
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script th:src="@{/assets/js/app.js}"></script>
 </html>

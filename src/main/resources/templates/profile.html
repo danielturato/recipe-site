@@ -1,26 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
 
-  <title>Chandra S. | My Recipes</title>
+  <title th:text="|${#authentication.name}. - My Recipes|">Chandra S. | My Recipes</title>
 
   <link href='https://fonts.googleapis.com/css?family=Varela+Round' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="../../../../../../Downloads/recipe-site%204/css/unsemantic-grid-responsive.css">
-  <link rel="stylesheet" href="../../../../../../Downloads/recipe-site%204/css/styles.css">
+  <link rel="stylesheet" th:href="@{/assets/css/unsemantic-grid-responsive.css}">
+  <link rel="stylesheet" th:href="@{/assets/css/styles.css}">
 
 </head>
 
 <body>
 
   <nav>
-    <a href="profile.html">
+    <a th:text="${#authentication.name}" th:href="@{|/users/${#authentication.name}|}">
       Chandra S.
     </a>
     &bull;
-    <a href="login.html">
+    <a th:href="@{/login}">
       logout
     </a>
   </nav>
@@ -28,9 +28,9 @@
   <div class="grid-container">
 
     <div class="grid-100">
-      <a href="index.html">
+      <a th:href="@{/recipes}">
         <h1>
-          <img src="../../../../../../Downloads/recipe-site%204/images/chefbot.svg" height="60px">
+          <img th:src="@{/assets/images/chefbot.svg}" height="60px">
           <br>
           My Recipes
         </h1>
@@ -43,50 +43,29 @@
 
         <div class="grid-100 row controls">
           <div class="grid-100">
-            <h2> Chandra S. </h2>
+            <h2 th:text="${#authentication.name}"> Chandra S. </h2>
           </div>
         </div> <div class="clear"></div>
 
-        <div class="grid-100 row addHover">
-          <a href="../../../../../../Downloads/recipe-site%204/detail.html">
-            <div class="grid-70">
-              <p>
-                <span><img src="../../../../../../Downloads/recipe-site%204/images/favorited.svg" height="12px"> </span>
-                Broiche French Toast with Nutella
-              </p>
-            </div>
-          </a>
-          <div class="hoverBlock">
-            <div class="grid-30">
-              <div class="flush-right">
-                <p>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/edit.svg" height="12px"> Edit </a>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/delete.svg" height="12px"> Delete </a>
-                </p>
+        <div class="grid-100 row addHover" th:each="recipe : ${user.favorites}">
+          <div class="grid-70">
+            <p>
+              <span><img th:src="@{/assets/images/favorited.svg}" height="12px"> </span>
+              <a th:href="@{|/recipes/${recipe.id}|}" th:text="${recipe.name}"></a>
+            </p>
+          </div>
+          <form th:id="|deleteForm${recipe.id}|" th:action="@{|/recipes/${recipe.id}/delete|}" method="post">
+            <div class="hoverBlock">
+              <div class="grid-30">
+                <div class="flush-right">
+                  <p>
+                    <a th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
+                    <a th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" style="cursor: pointer"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </div> <div class="clear"></div>
-
-        <div class="grid-100 row addHover">
-          <a href="../../../../../../Downloads/recipe-site%204/detail.html">
-            <div class="grid-70">
-              <p>
-                <span><img src="../../../../../../Downloads/recipe-site%204/images/favorited.svg" height="12px"> </span>
-                Meyer Lemon French Toast
-              </p>
-            </div>
-          </a>
-          <div class="hoverBlock">
-            <div class="grid-30">
-              <div class="flush-right">
-                <p>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/edit.svg" height="12px"> Edit </a>
-                  <a href="#"> <img src="../../../../../../Downloads/recipe-site%204/images/delete.svg" height="12px"> Delete </a>
-                </p>
-              </div>
-            </div>
-          </div>
+          </form>
         </div> <div class="clear"></div>
 
         <div class="row">&nbsp;</div>
@@ -95,4 +74,6 @@
     </div> <!-- grid-100 -->
   </div> <!-- grid-container -->
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+<script th:src="@{/assets/js/app.js}"></script>
 </html>

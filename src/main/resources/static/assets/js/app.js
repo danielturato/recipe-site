@@ -33,14 +33,28 @@ $('#editPhoto').click(function () {
 
 });
 
-
 $("[id ^= 'deleteButton']").each(function () {
     $(this).click(function () {
         var result = confirm("Are you sure you want to delete this recipe?");
-
+        var id = $(this).attr('id').substr(12);
         if (result) {
-            var form = '#deleteForm' + $(this).val();
+            var form = '#deleteForm' + id;
             $(form).submit();
         }
     })
 });
+
+$("#signUpButton").click(function () {
+    alert("In button method");
+   var passwordOne = $("#passwordOne").val();
+   var passwordTwo = $("#passwordTwo").val();
+
+   if (passwordOne === passwordTwo) {
+       alert("They equal");
+       $("#signUpForm").submit();
+   } else {
+       alert("Not equal");
+   }
+
+});
+

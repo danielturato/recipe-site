@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class RecipeController {
@@ -98,6 +99,7 @@ public class RecipeController {
 
     @RequestMapping(path = "/recipes/{id}/delete", method = RequestMethod.POST)
     public String deleteRecipe(@PathVariable Long id) {
+        removeFavorites(recipeService.findById(id));
         recipeService.deleteById(id);
 
         return "redirect:/recipes";
@@ -109,5 +111,16 @@ public class RecipeController {
         return recipeService.findById(id).getPhoto();
     }
 
+
+    private void removeFavorites(Recipe recipe) {
+        for (User user : userService.findAll()) {
+            List<Recipe> favs = user.getFavorites();
+            if (favs.contains(recipe)) {
+                favs.remove(recipe);
+                user.setFavorites(favs);
+                userService.save(user);
+            }
+        }
+    }
 
 }

@@ -16,7 +16,7 @@
 <body>
 
   <nav>
-    <a th:href="@{profile}" th:text="${#authentication.name}">
+    <a th:text="${#authentication.name}" th:href="@{|/users/${#authentication.name}|}">
       Chandra S.
     </a>
     &bull;
@@ -74,6 +74,18 @@
           <div class="grid-40">
             <p th:text="${recipe.name}">
               Brioche French Toast with Nutella
+            </p>
+          </div>
+        </div> <div class="clear"></div>
+
+        <div class="grid-100 row">
+          <div class="grid-20">
+            <p>
+              <label> Created by </label>
+            </p>
+          </div>
+          <div class="grid-40">
+            <p th:text="${recipe.owner.username}">
             </p>
           </div>
         </div> <div class="clear"></div>

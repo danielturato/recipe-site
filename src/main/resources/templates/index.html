@@ -16,7 +16,7 @@
 <body>
 
   <nav>
-    <a th:href="@{/profile}" th:text="${#authentication.name}">
+    <a th:text="${#authentication.name}" th:href="@{|/users/${#authentication.name}|}">
     </a>
     &bull;
     <a th:href="@{/logout}">
@@ -72,8 +72,10 @@
               <div class="grid-30">
                 <div class="flush-right">
                   <p>
-                    <a th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
-                    <a th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" style="cursor: pointer"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
+                    <a th:if="${#strings.equals(#authentication.name, recipe.owner.username) or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                       th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
+                    <a th:if="${#strings.equals(#authentication.name, recipe.owner.username) or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
+                       th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" style="cursor: pointer"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
                   </p>
                 </div>
               </div>
@@ -90,3 +92,5 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script th:src="@{/assets/js/app.js}"></script>
 </html>
+
+<!-- -->

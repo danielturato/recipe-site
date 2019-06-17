@@ -16,7 +16,7 @@
 <body>
 
   <nav>
-    <a href="profile.html" th:text="${#authentication.name}">
+    <a th:text="${#authentication.name}" th:href="@{|/users/${#authentication.name}|}">
       Chandra S.
     </a>
     &bull;
@@ -110,7 +110,7 @@
                 <p>
                   <select th:field="*{category}">
                     <option th:each="category : ${T(com.danielturato.recipe.category.Category).values()}"
-                            th:value="${category}" th:text="${category}">All Categories</option>
+                            th:value="${category}" th:text="${category.label}">All Categories</option>
                   </select>
                 </p>
               </div>
