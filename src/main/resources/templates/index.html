@@ -53,41 +53,46 @@
       <div class="recipes">
 
         <div class="grid-100 row controls">
-          <div class="grid-30">
-            <select>
-              <option th:each="category : ${T(com.danielturato.recipe.category.Category).values()}"
-                      th:value="${category}" th:text="${category.label}">All Categories</option>
-            </select>
-          </div>
-          <div class="grid-40">
-            <input placeholder="Search"></input>
-          </div>
-          <div class="grid-30">
-            <div class="flush-right">
-              <a th:href="@{/recipes/add}">
-                <button>+ Add Recipe</button>
-              </a>
+            <div class="grid-20">
+              <select name="category">
+                <option th:each="category : ${T(com.danielturato.recipe.category.Category).values()}"
+                        th:value="${category}" th:text="${category.label}">All Categories</option>
+              </select>
             </div>
-          </div>
-        </div> <div class="clear"></div>
+            <div class="grid-25">
+              <select name="ingredient">
+                <option>Any Ingredient</option>
+                <option th:value="${ing}" th:text="${ing.name}" th:each="ing : ${ingredients}">
+                </option>
+              </select>
+            </div>
+            <div class="grid-25">
+              <input id="recipeSearch" onkeyup="recipeSearchQuery()" placeholder="Search"></input>
+            </div>
+            <div class="grid-30">
+              <div class="flush-right">
+                <a th:href="@{/recipes/add}">
+                  <button type="button">+ Add Recipe</button>
+                </a>
+              </div>
+            </div>
+          </div> <div class="clear"></div>
 
-        <div class="grid-100 row addHover" th:each="recipe : ${recipes}">
+        <div th:value="${recipe.name}" th:id="|recipe${recipe.id}|" class="grid-100 row addHover" th:each="recipe : ${recipes}">
           <div class="grid-70">
             <p>
               <span th:if="${#lists.contains(favs, recipe)}"><img th:src="@{/assets/images/favorited.svg}" height="12px"> </span>
               <span th:if="${!#lists.contains(favs, recipe)}"><img th:src="@{/assets/images/favorite.svg}" height="12px"> </span>
-              <a th:href="@{|/recipes/${recipe.id}|}" th:text="${recipe.name}"></a>
+              <a th:id="|recipeText${recipe.id}|" th:value="${recipe.name}" th:href="@{|/recipes/${recipe.id}|}" th:text="${recipe.name}"></a>
             </p>
           </div>
           <form th:id="|deleteForm${recipe.id}|" th:action="@{|/recipes/${recipe.id}/delete|}" method="post">
             <div class="hoverBlock">
               <div class="grid-30">
                 <div class="flush-right">
-                  <p>
-                    <a th:if="${#strings.equals(#authentication.name, recipe.owner.username) or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                       th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
-                    <a th:if="${#strings.equals(#authentication.name, recipe.owner.username) or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
-                       th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" style="cursor: pointer"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
+                  <p th:if="${#strings.equals(#authentication.name, recipe.owner.username) or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a th:href="@{|/recipes/${recipe.id}/edit|}"> <img th:src="@{/assets/images/edit.svg}" height="12px"> Edit </a>
+                    <a th:value="${recipe.id}" th:id="|deleteButton${recipe.id}|" style="cursor: pointer"><img th:src="@{/assets/images/delete.svg}" height="12px"> Delete </a>
                   </p>
                 </div>
               </div>
@@ -96,6 +101,8 @@
         </div> <div class="clear"></div>
 
         <div class="row">&nbsp;</div>
+
+        <!-- -->
 
       </div> <!-- recipes -->
     </div> <!-- grid-100 -->

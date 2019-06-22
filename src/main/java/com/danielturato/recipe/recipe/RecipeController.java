@@ -1,6 +1,7 @@
 package com.danielturato.recipe.recipe;
 
 import com.danielturato.recipe.flash.FlashMessage;
+import com.danielturato.recipe.ingredient.IngredientServiceImpl;
 import com.danielturato.recipe.user.User;
 import com.danielturato.recipe.user.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +22,21 @@ public class RecipeController {
 
     private RecipeServiceImpl recipeService;
     private UserServiceImpl userService;
+    private IngredientServiceImpl ingredientService;
 
     @Autowired
-    public RecipeController(RecipeServiceImpl recipeService, UserServiceImpl userService) {
+    public RecipeController(RecipeServiceImpl recipeService, UserServiceImpl userService, IngredientServiceImpl ingredientService) {
         this.recipeService = recipeService;
         this.userService = userService;
+        this.ingredientService = ingredientService;
     }
 
     @GetMapping({"/", "/recipes"})
     public String index(Model model) {
         model.addAttribute("recipes", recipeService.findAll());
-        model.addAttribute("favs", getUser()
-                    .getFavorites());
+        model.addAttribute("favs", getUser().getFavorites());
+        model.addAttribute("ingredients", ingredientService.findAll());
+
         return "index";
     }
 
@@ -53,6 +57,7 @@ public class RecipeController {
     @RequestMapping(path = "/recipes/add", method = RequestMethod.POST)
     public String persistRecipe(@Valid Recipe recipe, BindingResult result, @RequestParam("image") MultipartFile photo, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
+            result.getAllErrors().forEach(System.out::println);
             redirectAttributes.addFlashAttribute("recipe", recipe);
             redirectAttributes.addFlashAttribute("flash",
                     new FlashMessage("I think you missed something. Try again!", FlashMessage.Status.FAILURE));
@@ -64,12 +69,12 @@ public class RecipeController {
         user.addFavorite(recipe);
         recipeService.save(recipe, photo);
         userService.save(user);
-        redirectAttributes.addFlashAttribute("flash", new FlashMessage("The recipe has successfully been added", FlashMessage.Status.SUCCESS));
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("The recipe has successfully been created", FlashMessage.Status.SUCCESS));
 
         return "redirect:/recipes";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeRepository.findById(#id).get()?.owner.username == authentication.name")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeServiceImpl?.findById(#id)?.owner.username == authentication.name")
     @RequestMapping(path = "/recipes/{id}/edit", method = RequestMethod.GET)
     public String editRecipe(Model model, @PathVariable("id") Long id) {
         Recipe recipe = recipeService.findById(id);
@@ -88,7 +93,7 @@ public class RecipeController {
         return "edit";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeRepository.findById(#id).get()?.owner.username == authentication.name")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeServiceImpl?.findById(#id)?.owner.username == authentication.name")
     @RequestMapping(path = "/recipes/{id}/edit", method = RequestMethod.POST)
     public String updateRecipe(@Valid Recipe recipe, BindingResult result, @PathVariable("id") Long id,
                                @RequestParam(required = false, value = "image") MultipartFile photo,
@@ -127,7 +132,7 @@ public class RecipeController {
         return "detail";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeRepository.findById(#id).get()?.owner.username == authentication.name")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @recipeServiceImpl?.findById(#id)?.owner.username == authentication.name")
     @RequestMapping(path = "/recipes/{id}/delete", method = RequestMethod.POST)
     public String deleteRecipe(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
         removeFavorites(recipeService.findById(id));
@@ -144,12 +149,14 @@ public class RecipeController {
         Recipe recipe = recipeService.findById(id);
         if (user.isAFavorite(recipe)) {
             user.removeFavorite(recipe);
+            redirectAttributes.addFlashAttribute("flash",
+                    new FlashMessage(String.format("%s has been removed from your favorites", recipe.getName()), FlashMessage.Status.SUCCESS));
         } else {
             user.addFavorite(recipe);
+            redirectAttributes.addFlashAttribute("flash",
+                    new FlashMessage(String.format("%s has been added to your favorites", recipe.getName()), FlashMessage.Status.SUCCESS));
         }
         userService.save(user);
-        redirectAttributes.addFlashAttribute("flash",
-                new FlashMessage(String.format("%s has been added to your favorites", recipe.getName()), FlashMessage.Status.SUCCESS));
 
 
         return String.format("redirect:/recipes/%d", id);

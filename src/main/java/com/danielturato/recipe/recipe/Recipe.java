@@ -4,6 +4,7 @@ import com.danielturato.recipe.category.Category;
 import com.danielturato.recipe.ingredient.Ingredient;
 import com.danielturato.recipe.core.BaseEntity;
 import com.danielturato.recipe.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -17,6 +18,7 @@ import java.util.TreeMap;
 @Entity
 public class Recipe extends BaseEntity {
     @Lob
+    @JsonIgnore
     private byte[] photo;
     @NotNull
     @Size(min = 1, max = 24)
@@ -39,7 +41,7 @@ public class Recipe extends BaseEntity {
     @ManyToOne
     private User owner;
 
-    protected Recipe() {
+    public Recipe() {
         super();
         ingredients = new ArrayList<>();
         steps = new ArrayList<>();

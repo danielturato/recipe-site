@@ -17,14 +17,14 @@ public class DataLoader implements ApplicationRunner {
     @Autowired
     UserRepository users;
 
-    @Autowired
-    RecipeRepository recipes;
-
     @Override
     public void run(ApplicationArguments args) throws Exception {
         if (users.findByUsername("admin") == null) {
             users.save(new User("admin", "password", new String[]{"ROLE_ADMIN", "ROLE_USER"}));
         }
 
+        if (users.findByUsername("daniel") == null) {
+            users.save(new User("daniel", "password", new String[]{"ROLE_USER"}));
+        }
     }
 }

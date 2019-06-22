@@ -14,7 +14,7 @@ public class Ingredient extends BaseEntity {
     @NotNull
     private int quantity;
 
-    protected Ingredient() {
+    public Ingredient() {
         super();
     }
 

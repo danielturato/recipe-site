@@ -40,7 +40,7 @@ public class RecipeServiceImpl implements RecipeService {
         if (recipe.isPresent()) {
             return recipe.get();
         }
-
+        System.out.println(id + " is not in db");
         // TODO:drt - Create new exception to handle this
         throw new RuntimeException();
     }
