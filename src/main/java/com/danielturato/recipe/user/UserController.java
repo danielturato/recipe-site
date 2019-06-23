@@ -50,6 +50,11 @@ public class UserController {
     @RequestMapping(path = "/sign-up", method = RequestMethod.POST)
     public String newUser(@Valid User user, RedirectAttributes redirectAttributes) {
         user.setRoles(new String[]{"ROLE_USER"});
+        if(!(userService.findByUsername(user.getUsername()) == null)) {
+            redirectAttributes.addFlashAttribute("flash", new FlashMessage("That username already exists!", FlashMessage.Status.FAILURE));
+            return "redirect:/sign-up";
+        }
+
         userService.save(user);
         redirectAttributes.addFlashAttribute("flash", new FlashMessage("Account created. Please login below.", FlashMessage.Status.SUCCESS));
         return "redirect:/login";

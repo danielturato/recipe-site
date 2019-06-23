@@ -17,6 +17,9 @@ public class DataLoader implements ApplicationRunner {
     @Autowired
     UserRepository users;
 
+    @Autowired
+    RecipeRepository recipeRepository;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         if (users.findByUsername("admin") == null) {
@@ -26,5 +29,11 @@ public class DataLoader implements ApplicationRunner {
         if (users.findByUsername("daniel") == null) {
             users.save(new User("daniel", "password", new String[]{"ROLE_USER"}));
         }
+
+//        for (User user : users.findAll()) {
+//            user.setFavorites(new ArrayList<>());
+//            users.save(user);
+//        }
+//        recipeRepository.deleteAll();
     }
 }

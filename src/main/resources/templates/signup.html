@@ -32,9 +32,21 @@
         <h1>
           <img th:src="@{/assets/images/chefbot.svg}" height="60px">
           <br>
-          My Recipes
+          Sign-up
         </h1>
       </a>
+    </div>
+
+    <div id="flashMessage" th:if="${flash}">
+      <div class="grid-100">
+        <div class="recipes">
+          <div class="grid-50 row prefix-25" style="text-align: center; background: #ac4343; color: #f2e2e2;">
+            <p th:text="${flash.message}">
+              This is a test.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="grid-100">

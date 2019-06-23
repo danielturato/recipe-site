@@ -1,68 +1,29 @@
 package com.danielturato.recipe.recipe;
 
-import com.danielturato.recipe.Application;
 import com.danielturato.recipe.category.Category;
-import com.danielturato.recipe.core.WebSecurity;
+import com.danielturato.recipe.core.BaseTest;
 import com.danielturato.recipe.core.WithMockCustomUser;
 import com.danielturato.recipe.ingredient.Ingredient;
-import com.danielturato.recipe.ingredient.IngredientService;
 import com.danielturato.recipe.ingredient.IngredientServiceImpl;
-import com.danielturato.recipe.recipe.Recipe;
-import com.danielturato.recipe.recipe.RecipeController;
-import com.danielturato.recipe.recipe.RecipeService;
-import com.danielturato.recipe.user.DetailsService;
 import com.danielturato.recipe.user.User;
-import com.danielturato.recipe.user.UserService;
 import com.danielturato.recipe.user.UserServiceImpl;
-import org.apache.tomcat.util.http.fileupload.FileItem;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.apache.tomcat.util.http.fileupload.disk.DiskFileItem;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.ApplicationContext;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@WebAppConfiguration
-public class RecipeControllerTests {
-
-	private MockMvc mockMvc;
+public class RecipeControllerTests extends BaseTest {
 
 	@MockBean
 	private RecipeServiceImpl recipeService;
@@ -72,14 +33,6 @@ public class RecipeControllerTests {
 
 	@MockBean
 	private IngredientServiceImpl ingredientService;
-
-	@Autowired
-	WebApplicationContext wac;
-
-	@Before
-	public void setUp() throws Exception {
-		mockMvc = MockMvcBuilders.webAppContextSetup(wac).apply(springSecurity()).build();
-	}
 
 	/**
 	 * Tests for index pages / & /recipes
@@ -96,7 +49,8 @@ public class RecipeControllerTests {
 
 		mockMvc.perform(get("/recipes"))
 				.andExpect(model().attributeExists("recipes", "ingredients", "favs"))
-				.andExpect(status().isOk());
+				.andExpect(status().isOk())
+				.andExpect(authenticated());
 
 		verify(recipeService, times(1)).findAll();
 		verify(ingredientService, times(1)).findAll();
@@ -115,21 +69,17 @@ public class RecipeControllerTests {
 				.andExpect(model().attributeExists("task", "buttonAction", "action", "photo", "recipe"));
 	}
 
+	/**
+	 * Create new recipe post request & redirects to /recipes
+	 */
 	@Test
 	@WithMockCustomUser(username = "daniel")
 	public void createNewRecipeRedirects() throws Exception {
 		User user = userBuilder();
-		MockMultipartFile photo = new MockMultipartFile("image", "food.jpeg",
-				"image/jpeg", "dummy content file".getBytes());
+		MockMultipartFile photo = getPhoto();
 
 		when(userService.findByUsername("daniel")).thenReturn(user);
-		doAnswer(invocation -> {
-			Recipe recipe = (Recipe)invocation.getArgument(0);
-			MultipartFile file = (MultipartFile)invocation.getArgument(1);
-			recipe.setPhoto(file.getBytes());
-			recipe.setId(1L);
-			return null;
-		}).when(recipeService).save(any(Recipe.class), any(MultipartFile.class));
+		doAnswer(invocation -> null).when(recipeService).save(any(Recipe.class), any(MultipartFile.class));
 
 		doAnswer(invocation -> null).when(userService).save(any(User.class));
 
@@ -138,45 +88,229 @@ public class RecipeControllerTests {
 						.param("name", "testRecipe")
 						.param("description", "testDesc")
 						.param("category", Category.BREAKFAST.name()))
-				.andDo(print())
 				.andExpect(redirectedUrl("/recipes"))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(flash().attributeExists("flash"));
+				.andExpect(flash().attributeExists("flash"))
+				.andExpect(authenticated());
 
 		verify(recipeService, times(1)).save(any(Recipe.class), any(MultipartFile.class));
 		verify(userService, times(1)).save(any(User.class));
 	}
 
+	/**
+	 * Form error redirects back to /recipes/add
+	 */
 	@Test
-	@WithMockUser
+	@WithMockCustomUser
 	public void errorWithRecipeCreationRedirectsBack() throws Exception {
-		MockMultipartFile photo = new MockMultipartFile("image", "food.jpeg",
-				"image/jpeg", "dummy content file".getBytes());
+		MockMultipartFile photo = getPhoto();
 
 		mockMvc.perform(multipart("/recipes/add")
 					.file(photo)
 					.param("description", "testDesc")
 					.param("category", Category.BREAKFAST.name()))
-				.andDo(print())
+				.andExpect(authenticated())
 				.andExpect(redirectedUrl("/recipes/add"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(flash().attributeExists("flash"));
 	}
 
+	/**
+	 * Edit recipe page loads if they are the recipe owner /recipe/{id}/edit
+	 */
 	@Test
 	@WithMockCustomUser(username = "daniel")
 	public void editRecipePageLoadsWithRecipeOwner() throws Exception {
 		Recipe recipe = recipeBuilder(1L);
-		User user = userBuilder();
-		recipe.setOwner(user);
+
+		when(recipeService.findById(1L)).thenReturn(recipe);
+
+		mockMvc.perform(get("/recipes/1/edit"))
+				.andExpect(authenticated())
+				.andExpect(status().isOk())
+				.andExpect(model().attributeExists("task", "buttonAction", "action", "recipe"));
+
+		verify(recipeService, times(2)).findById(any(Long.class));
+	}
+
+
+	/**
+	 * Edit recipe page loads if they are an admin and not recipe owner /recipe/{id}/edit
+	 */
+	@Test
+	@WithMockCustomUser(username = "admin")
+	public void editRecipePageLoadsWithNonOwnerWhoIsAdmin() throws Exception {
+		Recipe recipe = recipeBuilder(1L);
 
 		when(recipeService.findById(1L)).thenReturn(recipe);
 
 		mockMvc.perform(get("/recipes/1/edit"))
 				.andExpect(status().isOk())
+				.andExpect(authenticated())
 				.andExpect(model().attributeExists("task", "buttonAction", "action", "recipe"));
 
+		verify(recipeService, times(1)).findById(any(Long.class));
+	}
+
+	/**
+	 * Edit recipe page's access is denied if they are not the recipe owner or an admin /recipe/{id}/edit
+	 */
+	@Test
+	@WithMockCustomUser(username = "billy")
+	public void editRecipePageAccessDeniedByNonOwnerAndNonAdmin() throws Exception {
+		Recipe recipe = recipeBuilder(1L);
+
+		when(recipeService.findById(1L)).thenReturn(recipe);
+
+		mockMvc.perform(get("/recipes/1/edit")).andDo(print())
+				.andExpect(status().isForbidden())
+				.andExpect(authenticated())
+				.andExpect(forwardedUrl("/accessDenied"));
+
+		verify(recipeService).findById(any(Long.class));
+
+	}
+
+	/**
+	 * Edit recipe page post request keeping same photo redirects back to detail page
+	 */
+	@Test
+	@WithMockCustomUser(username = "daniel")
+	public void saveEditedRecipeKeepSamePhoto() throws Exception {
+		Recipe recipe = recipeBuilder(1L);
+
+		when(recipeService.findById(1L)).thenReturn(recipe);
+
+		doAnswer(invocation -> null).when(recipeService).save(recipe, recipe.getPhoto());
+
+		mockMvc.perform(multipart("/recipes/1/edit")
+					.param("name", "testRecipe")
+					.param("description", "testDesc")
+					.param("category", Category.BREAKFAST.name()))
+				.andExpect(authenticated())
+				.andExpect(redirectedUrl("/recipes/1"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(flash().attributeExists("flash"));
+
+		verify(recipeService).save(any(Recipe.class), any(byte[].class));
 		verify(recipeService, times(2)).findById(any(Long.class));
+	}
+
+	/**
+	 * Edit recipe page post request updating photo redirects back to detail page
+	 */
+	@Test
+	@WithMockCustomUser(username = "daniel")
+	public void saveEditedRecipeUpdatePhoto() throws Exception {
+		Recipe recipe = recipeBuilder(1L);
+
+		when(recipeService.findById(1L)).thenReturn(recipe);
+
+		doAnswer(invocation -> null).when(recipeService).save(recipe, getPhoto());
+
+		mockMvc.perform(multipart("/recipes/1/edit")
+					.file(getPhoto())
+					.param("name", "testRecipe")
+					.param("description", "testDesc")
+					.param("category", Category.BREAKFAST.name()))
+				.andExpect(authenticated())
+				.andExpect(redirectedUrl("/recipes/1"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(flash().attributeExists("flash"));
+
+		verify(recipeService).save(any(Recipe.class), any(MultipartFile.class));
+		verify(recipeService, times(2)).findById(any(Long.class));
+	}
+
+	/**
+	 * Recipe detail page loads
+	 */
+	@Test
+	@WithMockCustomUser(username = "daniel")
+	public void recipeDetailPageLoads() throws Exception {
+		User user = userBuilder();
+		Recipe recipe = recipeBuilder(1L);
+
+		when(recipeService.findById(1L)).thenReturn(recipe);
+		when(userService.findByUsername("daniel")).thenReturn(user);
+
+		mockMvc.perform(get("/recipes/1"))
+				.andExpect(status().isOk())
+				.andExpect(authenticated())
+				.andExpect(model().attributeExists("recipe"));
+
+		verify(recipeService).findById(any(Long.class));
+		verify(userService).findByUsername(any(String.class));
+	}
+
+	/**
+	 * Delete a recipe as the recipe owner and redirect to /recipes
+	 */
+	@Test
+	@WithMockCustomUser(username = "daniel")
+	public void deleteRecipeAsRecipeOwner() throws Exception {
+		Recipe recipe = recipeBuilder(1L);
+
+		when(recipeService.findById(1L)).thenReturn(recipe);
+		when(userService.findAll()).thenReturn(new ArrayList<>());
+		doAnswer(invocation -> null).when(recipeService).deleteById(1L);
+
+		mockMvc.perform(post("/recipes/1/delete"))
+				.andExpect(authenticated())
+				.andExpect(flash().attributeExists("flash"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/recipes"));
+
+		verify(recipeService, times(2)).findById(any(Long.class));
+		verify(userService).findAll();
+		verify(recipeService).deleteById(any(Long.class));
+	}
+
+	/**
+	 * Delete a recipe as the recipe owner and redirect to /recipes
+	 */
+	@Test
+	@WithMockCustomUser(username = "admin")
+	public void deleteRecipeAsAdmin() throws Exception {
+		Recipe recipe = recipeBuilder(1L);
+
+		when(recipeService.findById(1L)).thenReturn(recipe);
+		when(userService.findAll()).thenReturn(new ArrayList<>());
+		doAnswer(invocation -> null).when(recipeService).deleteById(1L);
+
+		mockMvc.perform(post("/recipes/1/delete"))
+				.andExpect(authenticated())
+				.andExpect(flash().attributeExists("flash"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/recipes"));
+
+		verify(recipeService).findById(any(Long.class));
+		verify(userService).findAll();
+		verify(recipeService).deleteById(any(Long.class));
+	}
+
+	/**
+	 * Favoring recipe redirects back to recipe detail
+	 */
+	@Test
+	@WithMockCustomUser(username = "daniel")
+	public void favoriteRecipeRedirectsBackToRecipe() throws Exception {
+		User user = userBuilder();
+		Recipe recipe = recipeBuilder(1L);
+
+		when(recipeService.findById(1L)).thenReturn(recipe);
+		when(userService.findByUsername("daniel")).thenReturn(user);
+		doAnswer(invocation -> null).when(userService).save(user);
+
+		mockMvc.perform(post("/recipes/1/favorite"))
+				.andExpect(authenticated())
+				.andExpect(flash().attributeExists("flash"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("/recipes/1"));
+
+		verify(recipeService).findById(any(Long.class));
+		verify(userService).findByUsername(any(String.class));
+		verify(userService).save(any(User.class));
 	}
 
 	private User userBuilder() {
@@ -214,7 +348,7 @@ public class RecipeControllerTests {
 		return ingredient;
 	}
 
-	private Recipe recipeBuilder(Long id) {
+	private Recipe recipeBuilder(Long id)  {
 		Recipe recipe = new Recipe();
 		recipe.setName("Test recipe");
 		recipe.setDescription("Test Description");
@@ -224,7 +358,17 @@ public class RecipeControllerTests {
 		recipe.setPrepTime(10);
 		recipe.addIngredient(ingredientBuilder());
 		recipe.setOwner(userBuilder());
+		try {
+			recipe.setPhoto(getPhoto().getBytes());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 
 		return recipe;
+	}
+
+	private MockMultipartFile getPhoto() {
+		return new MockMultipartFile("image", "food.jpeg",
+				"image/jpeg", "dummy content file".getBytes());
 	}
 }

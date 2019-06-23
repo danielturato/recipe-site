@@ -106,8 +106,11 @@ public class RecipeController {
             return String.format("/redirect:/recipes/%d/edit", id);
         }
 
+        Recipe original = recipeService.findById(id);
+        recipe.setOwner(original.getOwner());
+
         if (photo == null) {
-            recipeService.save(recipe, recipeService.findById(id).getPhoto());
+            recipeService.save(recipe, original.getPhoto());
         } else {
             recipeService.save(recipe, photo);
         }
