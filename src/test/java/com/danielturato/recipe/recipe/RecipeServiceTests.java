@@ -1,19 +1,13 @@
 package com.danielturato.recipe.recipe;
 
-import com.danielturato.recipe.category.Category;
+import com.danielturato.recipe.core.BaseTest;
 import com.danielturato.recipe.exception.RecipeNotFoundException;
-import com.danielturato.recipe.user.User;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -22,8 +16,7 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-public class RecipeServiceTests {
+public class RecipeServiceTests extends BaseTest {
 
     @TestConfiguration
     static class RecipeServiceImplTestContextConfiguration {
@@ -89,26 +82,4 @@ public class RecipeServiceTests {
         verify(recipeRepository).deleteById(any(Long.class));
     }
 
-    private Recipe recipeBuilder(Long id)  {
-        Recipe recipe = new Recipe();
-        recipe.setName("Test recipe");
-        recipe.setDescription("Test Description");
-        recipe.setId(id);
-        recipe.setCategory(Category.ALL_CATEGORIES);
-        recipe.setCookTime(10);
-        recipe.setPrepTime(10);
-        recipe.setOwner(new User());
-        try {
-            recipe.setPhoto(getPhoto().getBytes());
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        return recipe;
-    }
-
-    private MockMultipartFile getPhoto() {
-        return new MockMultipartFile("image", "food.jpeg",
-                "image/jpeg", "dummy content file".getBytes());
-    }
 }

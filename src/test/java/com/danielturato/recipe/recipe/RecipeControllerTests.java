@@ -1,6 +1,7 @@
 package com.danielturato.recipe.recipe;
 
 import com.danielturato.recipe.category.Category;
+import com.danielturato.recipe.core.BaseControllerTest;
 import com.danielturato.recipe.core.BaseTest;
 import com.danielturato.recipe.core.WithMockCustomUser;
 import com.danielturato.recipe.ingredient.Ingredient;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class RecipeControllerTests extends BaseTest {
+public class RecipeControllerTests extends BaseControllerTest {
 
 	@MockBean
 	private RecipeServiceImpl recipeService;

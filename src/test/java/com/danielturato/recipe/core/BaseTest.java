@@ -22,19 +22,7 @@ import java.util.List;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-@WebAppConfiguration
-public abstract class BaseTest {
-
-    protected MockMvc mockMvc;
-
-    @Autowired
-    WebApplicationContext wac;
-
-    @Before
-    public void setUp() throws Exception {
-        mockMvc = MockMvcBuilders.webAppContextSetup(wac).apply(springSecurity()).build();
-    }
+public abstract class BaseTest  {
 
     protected User userBuilder() {
         User user = new User();

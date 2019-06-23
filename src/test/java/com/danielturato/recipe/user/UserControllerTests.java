@@ -1,5 +1,6 @@
 package com.danielturato.recipe.user;
 
+import com.danielturato.recipe.core.BaseControllerTest;
 import com.danielturato.recipe.core.BaseTest;
 import com.danielturato.recipe.core.WithMockCustomUser;
 import org.junit.Test;
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-public class UserControllerTests extends BaseTest {
+public class UserControllerTests extends BaseControllerTest {
 
     @MockBean
     UserServiceImpl userService;
