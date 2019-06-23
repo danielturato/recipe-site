@@ -1,5 +1,6 @@
 package com.danielturato.recipe.recipe;
 
+import com.danielturato.recipe.exception.RecipeNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -11,12 +12,8 @@ import java.util.Optional;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
-    private final RecipeRepository recipes;
-
     @Autowired
-    public RecipeServiceImpl(RecipeRepository recipes) {
-        this.recipes = recipes;
-    }
+    private RecipeRepository recipes;
 
     @Override
     public void save(Recipe recipe, byte[] photo) {
@@ -39,10 +36,9 @@ public class RecipeServiceImpl implements RecipeService {
         Optional<Recipe> recipe = recipes.findById(id);
         if (recipe.isPresent()) {
             return recipe.get();
+        } else {
+            throw new RecipeNotFoundException("The recipe you're looking for cannot be found!");
         }
-        System.out.println(id + " is not in db");
-        // TODO:drt - Create new exception to handle this
-        throw new RuntimeException();
     }
 
     @Override
