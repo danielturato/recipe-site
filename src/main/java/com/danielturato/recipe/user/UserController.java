@@ -2,7 +2,9 @@ package com.danielturato.recipe.user;
 
 import com.danielturato.recipe.flash.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,16 @@ public class UserController {
     @RequestMapping(path = "/login", method = RequestMethod.GET)
     public String login() {
         return "login";
+    }
+
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public String loginPost(HttpServletRequest request, String username, String password) {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        UsernamePasswordAuthenticationToken authReq =
+                new UsernamePasswordAuthenticationToken(username, password);
+        context.setAuthentication(authReq);
+
+        return "redirect:/recipes";
     }
 
     @RequestMapping(path = "/sign-up", method = RequestMethod.GET)

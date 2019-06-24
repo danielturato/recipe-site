@@ -38,8 +38,8 @@ public class UserControllerTests extends BaseControllerTest {
     public void canLoginWithUser() throws Exception {
         mockMvc.perform(formLogin("/login")
                     .user("daniel").password("password"))
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(forwardedUrl("/recipes"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"))
                 .andExpect(authenticated());
     }
 

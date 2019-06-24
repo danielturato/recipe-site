@@ -66,17 +66,13 @@ $('#flashMessage').slideDown(function () {
    }, 5000);
 });
 
-function recipeSearchQuery() {
-    var input = $('#recipeSearch').val();
-    var recipes = $("[id ^= 'recipe']");
-    recipes.each(function () {
-        var div = $(this);
-        var recipe = $(this).find("[id ^= 'recipeText']").text();
-        console.log(recipe);
-        if (!(recipe.includes(input))) {
-            $('#' + div.attr("id")).hide();
-        } else {
-            $('#' + div.attr("id")).show();
+function recipeSearchQuery(elem) {
+    if (elem.attr("id") === 'recipeSearch') {
+        if (elem.keyCode === 13) {
+            $('#queryForm').submit();
         }
-    });
+    } else {
+        $('#queryForm').submit();
+    }
+
 }

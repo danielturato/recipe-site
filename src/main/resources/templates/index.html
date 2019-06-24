@@ -53,21 +53,21 @@
       <div class="recipes">
 
         <div class="grid-100 row controls">
+          <form th:action="@{/recipes/search}" method="post" id="queryForm" th:object="${queryObject}">
             <div class="grid-20">
-              <select name="category">
-                <option th:each="category : ${T(com.danielturato.recipe.category.Category).values()}"
+              <select th:field="*{category}" onchange="recipeSearchQuery()">
+                <option name="category" th:each="category : ${T(com.danielturato.recipe.category.Category).values()}"
                         th:value="${category}" th:text="${category.label}">All Categories</option>
               </select>
             </div>
             <div class="grid-25">
-              <select name="ingredient">
-                <option>Any Ingredient</option>
-                <option th:value="${ing}" th:text="${ing.name}" th:each="ing : ${ingredients}">
+              <select th:field="*{ingredient}" id="ingredient" onchange="recipeSearchQuery()">
+                <option th:value="${ing.id}" th:text="${ing.name}" th:each="ing : ${ingredients}">
                 </option>
               </select>
             </div>
             <div class="grid-25">
-              <input id="recipeSearch" onkeyup="recipeSearchQuery()" placeholder="Search"></input>
+              <input id="recipeSearch" th:field="*{name}" onkeydown="recipeSearchQuery(this)" placeholder="Search"/>
             </div>
             <div class="grid-30">
               <div class="flush-right">
@@ -76,6 +76,7 @@
                 </a>
               </div>
             </div>
+          </form>
           </div> <div class="clear"></div>
 
         <div th:value="${recipe.name}" th:id="|recipe${recipe.id}|" class="grid-100 row addHover" th:each="recipe : ${recipes}">

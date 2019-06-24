@@ -38,7 +38,6 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                     .and()
                 .formLogin()
                     .loginPage("/login")
-                    .successForwardUrl("/recipes")
                     .permitAll()
                     .and()
                 .logout()

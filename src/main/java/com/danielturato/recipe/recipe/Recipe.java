@@ -54,6 +54,7 @@ public class Recipe extends BaseEntity {
         this.category = category;
         this.prepTime = prepTime;
         this.cookTime = cookTime;
+
     }
 
     public User getOwner() {

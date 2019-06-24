@@ -1,6 +1,8 @@
 package com.danielturato.recipe.recipe;
 
+import com.danielturato.recipe.category.Category;
 import com.danielturato.recipe.flash.FlashMessage;
+import com.danielturato.recipe.ingredient.Ingredient;
 import com.danielturato.recipe.ingredient.IngredientServiceImpl;
 import com.danielturato.recipe.user.User;
 import com.danielturato.recipe.user.UserServiceImpl;
@@ -33,7 +35,13 @@ public class RecipeController {
 
     @GetMapping({"/", "/recipes"})
     public String index(Model model) {
-        model.addAttribute("recipes", recipeService.findAll());
+        if (!model.containsAttribute("recipes")) {
+            model.addAttribute("recipes", recipeService.findAll());
+        }
+        if (!model.containsAttribute("queryObject")) {
+            model.addAttribute("queryObject", new RecipeQuery());
+        }
+
         model.addAttribute("favs", getUser().getFavorites());
         model.addAttribute("ingredients", ingredientService.findAll());
 
@@ -163,6 +171,16 @@ public class RecipeController {
 
 
         return String.format("redirect:/recipes/%d", id);
+    }
+
+    @RequestMapping(path = "/recipes/search", method = RequestMethod.POST)
+    public String searchQuery(RecipeQuery query, RedirectAttributes attributes) {
+        List<Recipe> recipes = recipeService.queryRecipes(query);
+
+        attributes.addFlashAttribute("recipes", recipes);
+        attributes.addFlashAttribute("queryObject", query);
+
+        return "redirect:/recipes";
     }
 
     @RequestMapping(path = "/accessDenied")

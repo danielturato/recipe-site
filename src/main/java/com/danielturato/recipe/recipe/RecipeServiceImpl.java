@@ -1,6 +1,8 @@
 package com.danielturato.recipe.recipe;
 
+import com.danielturato.recipe.category.Category;
 import com.danielturato.recipe.exception.RecipeNotFoundException;
+import com.danielturato.recipe.ingredient.Ingredient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,5 +56,22 @@ public class RecipeServiceImpl implements RecipeService {
     @Override
     public void deleteById(Long id) {
         recipes.deleteById(id);
+    }
+
+    @Override
+    public List<Recipe> queryRecipes(RecipeQuery query) {
+        Category category = query.getCategory();
+        Ingredient ingredient = query.getIngredient();
+        String name = query.getName();
+
+        if (category == null && ingredient == null && name == null) {
+            return (List<Recipe>) recipes.findAll();
+        } else if (category != null && ingredient == null && name == null) {
+            return recipes.findAllByCategory(category);
+        } else if (category == null & ingredient != null && name == null) {
+            return recipes.findAllByIngredients(ingredient);
+        } else {
+            return recipes.findAllByCategoryAndIngredientsAndNameContaining(category, ingredient, name);
+        }
     }
 }
