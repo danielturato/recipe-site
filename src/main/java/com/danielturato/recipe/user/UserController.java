@@ -33,16 +33,6 @@ public class UserController {
         return "login";
     }
 
-    @RequestMapping(path = "/login", method = RequestMethod.POST)
-    public String loginPost(HttpServletRequest request, String username, String password) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        UsernamePasswordAuthenticationToken authReq =
-                new UsernamePasswordAuthenticationToken(username, password);
-        context.setAuthentication(authReq);
-
-        return "redirect:/recipes";
-    }
-
     @RequestMapping(path = "/sign-up", method = RequestMethod.GET)
     public String signUp(Model model) {
         model.addAttribute("user", new User());
