@@ -15,8 +15,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @Configuration
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserDetailsService detailsService;
+    private final UserDetailsService detailsService;
+
+    public WebSecurity(UserDetailsService detailsService) {
+        this.detailsService = detailsService;
+    }
 
     @Override
     public void configure(org.springframework.security.config.annotation.web.builders.WebSecurity web) throws Exception {

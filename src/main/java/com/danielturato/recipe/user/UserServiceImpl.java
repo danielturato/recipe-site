@@ -8,8 +8,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository users;
+    private final UserRepository users;
+
+    public UserServiceImpl(UserRepository users) {
+        this.users = users;
+    }
 
     @Override
     public User findByUsername(String username) {

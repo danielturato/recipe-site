@@ -8,8 +8,11 @@ import java.util.List;
 @Service
 public class IngredientServiceImpl implements IngredientService {
 
-    @Autowired
-    IngredientRepository ingredients;
+    private final IngredientRepository ingredients;
+
+    public IngredientServiceImpl(IngredientRepository ingredients) {
+        this.ingredients = ingredients;
+    }
 
     @Override
     public List<Ingredient> findAll() {

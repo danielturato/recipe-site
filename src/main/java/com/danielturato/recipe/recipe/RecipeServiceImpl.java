@@ -14,8 +14,11 @@ import java.util.Optional;
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
-    @Autowired
-    private RecipeRepository recipes;
+    private final RecipeRepository recipes;
+
+    public RecipeServiceImpl(RecipeRepository recipes) {
+        this.recipes = recipes;
+    }
 
     @Override
     public void save(Recipe recipe, byte[] photo) {
